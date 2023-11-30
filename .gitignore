@@ -1,0 +1,11 @@
+.gradle
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+build/
+gate-emulator/node_modules/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/out/
+!**/src/test/**/out/
