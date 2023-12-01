@@ -39,7 +39,6 @@ public class DataHelper {
         String CVC;
     }
 
-    @Value
     public static class CardItem {
         String cardNumber;
         String cardStatus;
