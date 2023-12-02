@@ -1,5 +1,7 @@
 package ru.netology.aqa.data;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import net.datafaker.Faker;
 
 import java.io.File;
@@ -24,29 +26,29 @@ public class DataHelper {
     }
 
     public static CardInfo generateValidCardInfo() {
-        return new CardInfo(generateRandomCardNumber(), generateRandomCardExpireMonth(), generateRandomCardExpireYear(),
-                generateRandomCardOwnerName(), generateRandomCardCVV());
+        return new CardInfo(generateValidCardNumber(), generateValidCardExpireMonth(), generateValidCardExpireYear(),
+                generateValidCardOwnerName(), generateValidCardCVV());
     }
 
-    public static String generateRandomCardNumber() {
+    public static String generateValidCardNumber() {
         return faker.finance().creditCard();
     }
 
-    public static String generateRandomCardExpireMonth() {
+    public static String generateValidCardExpireMonth() {
         int randomNumber = faker.number().numberBetween(1, 12);
         return String.valueOf(randomNumber);
     }
 
-    public static String generateRandomCardExpireYear() {
+    public static String generateValidCardExpireYear() {
         int randomYear = faker.number().numberBetween(2023, 2033);
         return String.valueOf(randomYear).substring(2);
     }
 
-    public static String generateRandomCardOwnerName() {
+    public static String generateValidCardOwnerName() {
         return faker.lorem().characters(20);
     }
 
-    public static String generateRandomCardCVV() {
+    public static String generateValidCardCVV() {
         return faker.numerify("###");
     }
 
@@ -70,5 +72,33 @@ public class DataHelper {
             this.cardStatus = cardStatus;
         }
 
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class CreditRequestEntity {
+        private String id;
+        private String bank_id;
+        private String created;
+        private String status;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class PaymentEntity {
+        private String id;
+        private String amount;
+        private String created;
+        private String status;
+        private String transaction_id;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class OrderEntity {
+        private String id;
+        private String created;
+        private String credit_id;
+        private String payment_id;
     }
 }
