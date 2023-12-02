@@ -16,18 +16,38 @@ public class DataHelper {
     private DataHelper() {
     }
 
-//    public static CardInfo generateRandomCard() {
-//        return new CardInfo(generateRandomCardNumber(), generateRandomCardExpireMonth(), generateRandomCardExpireYear(),
-//          generateRandomCardOwnerName(), generateRandomCardCVV());
-//    }
-
     public static List<CardItem> getCardItemsFromFile(String fileName) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(fileName);
-        return mapper.readValue(jsonFile, new TypeReference<>(){});
+        return mapper.readValue(jsonFile, new TypeReference<>() {
+        });
     }
+
+    public static CardInfo generateValidCardInfo() {
+        return new CardInfo(generateRandomCardNumber(), generateRandomCardExpireMonth(), generateRandomCardExpireYear(),
+                generateRandomCardOwnerName(), generateRandomCardCVV());
+    }
+
     public static String generateRandomCardNumber() {
         return faker.finance().creditCard();
+    }
+
+    public static String generateRandomCardExpireMonth() {
+        int randomNumber = faker.number().numberBetween(1, 12);
+        return String.valueOf(randomNumber);
+    }
+
+    public static String generateRandomCardExpireYear() {
+        int randomYear = faker.number().numberBetween(2023, 2033);
+        return String.valueOf(randomYear).substring(2);
+    }
+
+    public static String generateRandomCardOwnerName() {
+        return faker.lorem().characters(20);
+    }
+
+    public static String generateRandomCardCVV() {
+        return faker.numerify("###");
     }
 
     @Value
@@ -42,10 +62,10 @@ public class DataHelper {
     public static class CardItem {
         String cardNumber;
         String cardStatus;
+
         public CardItem(
                 @JsonProperty("number") String cardNumber,
-                @JsonProperty("status") String cardStatus)
-        {
+                @JsonProperty("status") String cardStatus) {
             this.cardNumber = cardNumber;
             this.cardStatus = cardStatus;
         }

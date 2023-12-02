@@ -2,7 +2,7 @@ version: '3.7'
 services:
   mysql:
     image: mysql:8.0.35
-    restart: always
+    restart: unless-stopped
     ports:
       - '3306:3306'
     environment:
@@ -12,7 +12,7 @@ services:
       - MYSQL_PASSWORD=pass
   postgres:
     image: postgres:16.1-alpine
-    restart: always
+    restart: unless-stopped
     ports:
       - '5432:5432'
     environment:

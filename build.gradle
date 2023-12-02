@@ -17,7 +17,7 @@ dependencies {
     testImplementation 'com.codeborne:selenide:6.19.1'
     testImplementation 'io.qameta.allure:allure-selenide:2.24.0'
     testImplementation 'io.qameta.allure:allure-junit5:2.24.0'
-    testImplementation 'net.datafaker:datafaker:2.0.2'
+    testImplementation 'net.datafaker:datafaker:1.9.0'
     testImplementation 'commons-dbutils:commons-dbutils:1.8.1'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
     testImplementation 'com.mysql:mysql-connector-j:8.2.0'
