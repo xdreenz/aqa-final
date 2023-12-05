@@ -21,8 +21,7 @@ public class DataHelper {
     public static List<CardItem> getCardItemsFromFile(String fileName) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(fileName);
-        return mapper.readValue(jsonFile, new TypeReference<>() {
-        });
+        return mapper.readValue(jsonFile, new TypeReference<>(){});
     }
 
     public static CardInfo generateValidCardInfo() {
@@ -40,8 +39,8 @@ public class DataHelper {
     }
 
     public static String generateValidCardExpireYear() {
-        int randomYear = faker.number().numberBetween(2023, 2033);
-        return String.valueOf(randomYear).substring(2);
+        int randomYear = faker.number().numberBetween(23, 28);
+        return String.valueOf(randomYear);
     }
 
     public static String generateValidCardOwnerName() {
@@ -58,7 +57,7 @@ public class DataHelper {
         String cardExpireMonth;
         String cardExpireYear;
         String cardOwnerName;
-        String CVC;
+        String cardCVC;
     }
 
     public static class CardItem {
@@ -75,7 +74,6 @@ public class DataHelper {
     }
 
     @Data
-    @NoArgsConstructor
     public static class CreditRequestEntity {
         private String id;
         private String bank_id;
@@ -84,7 +82,6 @@ public class DataHelper {
     }
 
     @Data
-    @NoArgsConstructor
     public static class PaymentEntity {
         private String id;
         private String amount;
@@ -94,7 +91,6 @@ public class DataHelper {
     }
 
     @Data
-    @NoArgsConstructor
     public static class OrderEntity {
         private String id;
         private String created;
