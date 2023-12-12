@@ -1,7 +1,6 @@
 package ru.netology.aqa.data;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import net.datafaker.Faker;
 
 import java.io.File;
@@ -14,19 +13,12 @@ import lombok.Value;
 
 public class DataHelper {
     private static final Faker faker = new Faker();
+    public static final String APPROVED_STATUS = "APPROVED";
+    public static final String DECLINED_STATUS = "DECLINED";
+    public static final String DataJSONLocation = "gate-emulator/data.json";
+    public static final String localhostURL = "http://localhost:8080";
 
     private DataHelper() {
-    }
-
-    public static List<CardItem> getCardItemsFromFile(String fileName) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        File jsonFile = new File(fileName);
-        return mapper.readValue(jsonFile, new TypeReference<>(){});
-    }
-
-    public static CardInfo generateValidCardInfo() {
-        return new CardInfo(generateValidCardNumber(), generateValidCardExpireMonth(), generateValidCardExpireYear(),
-                generateValidCardOwnerName(), generateValidCardCVV());
     }
 
     public static String generateValidCardNumber() {
@@ -51,6 +43,21 @@ public class DataHelper {
         return faker.numerify("###");
     }
 
+    public static String getPaymentAmount() {
+        return "4500000";
+    }
+
+    public static List<CardItem> getCardItemsFromFile(String fileName) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        File jsonFile = new File(fileName);
+        return mapper.readValue(jsonFile, new TypeReference<>(){});
+    }
+
+    public static CardInfo generateValidCardInfo() {
+        return new CardInfo(generateValidCardNumber(), generateValidCardExpireMonth(), generateValidCardExpireYear(),
+                generateValidCardOwnerName(), generateValidCardCVV());
+    }
+
     @Value
     public static class CardInfo {
         String cardNumber;
@@ -60,6 +67,7 @@ public class DataHelper {
         String cardCVC;
     }
 
+    @Value
     public static class CardItem {
         String cardNumber;
         String cardStatus;
@@ -73,7 +81,7 @@ public class DataHelper {
 
     }
 
-    @Data
+    @Getter
     public static class CreditRequestEntity {
         private String id;
         private String bank_id;
@@ -81,7 +89,7 @@ public class DataHelper {
         private String status;
     }
 
-    @Data
+    @Getter
     public static class PaymentEntity {
         private String id;
         private String amount;
@@ -90,7 +98,7 @@ public class DataHelper {
         private String transaction_id;
     }
 
-    @Data
+    @Getter
     public static class OrderEntity {
         private String id;
         private String created;

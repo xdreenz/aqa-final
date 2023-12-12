@@ -3,7 +3,6 @@ package ru.netology.aqa.data;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,27 +20,32 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static DataHelper.CreditRequestEntity getCreditEntity() {
+    public static void cleanDatabase() {
+        var conn = getConn();
+        runner.execute(conn, "DELETE FROM order_entity");
+        runner.execute(conn, "DELETE FROM payment_entity");
+        runner.execute(conn, "DELETE FROM credit_request_entity");
+    }
+
+    @SneakyThrows
+    public static DataHelper.CreditRequestEntity getCreditRequestEntity() {
         var codeSQL = "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        var result = runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.CreditRequestEntity.class));
-        return result;
+        return runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.CreditRequestEntity.class));
     }
 
     @SneakyThrows
     public static DataHelper.OrderEntity getOrderEntity() {
         var codeSQL = "SELECT * FROM order_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        var result = runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.OrderEntity.class));
-        return result;
+        return runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.OrderEntity.class));
     }
 
     @SneakyThrows
     public static DataHelper.PaymentEntity getPaymentEntity() {
         var codeSQL = "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        var result = runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.PaymentEntity.class));
-        return result;
+        return runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.PaymentEntity.class));
     }
 
 }
