@@ -24,14 +24,14 @@ public class CreditTest {
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open("http://localhost:8080", DashboardPage.class);
+        var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
         creditPage = dashboardPage.chooseCredit();
     }
 
     @Test
     @DisplayName("Card №1 from the emulator's base: does its displayed status equal the correct one received from the emulator")
     void shouldBeSuccess11() {
-        var cardItem = cardItems.get(0);
+        var cardItem = cardItems.get(0);    //Номер и статус 1-й карты из БД эмулятора
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
         creditPage.proceedTheCard(cardInfo);
@@ -79,9 +79,12 @@ public class CreditTest {
     }
 
     @Test
-    @DisplayName("Have the transaction_id's been saved to both tables")
+    @DisplayName("The card from the emulator's base: Have the transaction_id's been saved to both tables")
     void shouldBeSuccess3() {
-        creditPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
+        creditPage.proceedTheCard(cardInfo);
         var bank_idFromCreditRequestEntity = SQLHelper.getCreditRequestEntity().getBank_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertFalse(bank_idFromCreditRequestEntity.isEmpty());
@@ -89,18 +92,24 @@ public class CreditTest {
     }
 
     @Test
-    @DisplayName("Are the transaction_id's the same in both tables")
+    @DisplayName("The card from the emulator's base: Are the transaction_id's the same in both tables")
     void shouldBeSuccess4() {
-        creditPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
+        creditPage.proceedTheCard(cardInfo);
         var bank_idFromCreditEntity = SQLHelper.getCreditRequestEntity().getBank_id();
-        var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
+        var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
         Assertions.assertEquals(transaction_idFromOrderEntity, bank_idFromCreditEntity);
     }
 
     @Test
-    @DisplayName("Is order_entity.payment_id empty")
+    @DisplayName("The card from the emulator's base: Is order_entity.payment_id empty")
     void shouldBeSuccess5() {
-        creditPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
+        creditPage.proceedTheCard(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
     }
@@ -108,8 +117,26 @@ public class CreditTest {
     @Test
     @DisplayName("Is the payment_entity table empty")
     void shouldBeSuccess6() {
-        creditPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
-        var idFromPaymentRequestEntity = SQLHelper.getPaymentEntity().getId();
-        Assertions.assertTrue(idFromPaymentRequestEntity.isEmpty());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
+        creditPage.proceedTheCard(cardInfo);
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
+    }
+
+    @Test
+    @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
+    void shouldBeSuccess9() {
+        creditPage.proceedTheCard(DataHelper.generateValidCardInfo());
+        creditPage.shouldBeDeclinedMessage();
+    }
+
+    @Test
+    @DisplayName("The card not from the emulator's base: the credit request shouldn't be saved in database")
+    void shouldBeSuccess10() {
+        creditPage.proceedTheCard(DataHelper.generateValidCardInfo());
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("order_entity"));
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
     }
 }

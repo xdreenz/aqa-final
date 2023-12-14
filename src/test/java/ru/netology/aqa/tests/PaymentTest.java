@@ -24,7 +24,7 @@ public class PaymentTest {
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open("http://localhost:8080", DashboardPage.class);
+        var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
         paymentPage = dashboardPage.choosePayment();
     }
 
@@ -79,26 +79,35 @@ public class PaymentTest {
     }
 
     @Test
-    @DisplayName("Have the payment amount been saved")
+    @DisplayName("The card from the emulator's base: Have the payment amount been saved")
     void shouldBeSuccess3() {
-        paymentPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
         var actualPaymentAmount = SQLHelper.getPaymentEntity().getAmount();
         Assertions.assertFalse(actualPaymentAmount.isEmpty());
     }
 
     @Test
-    @DisplayName("Have the payment amount been saved correctly")
+    @DisplayName("The card from the emulator's base: Have the payment amount been saved correctly")
     void shouldBeSuccess4() {
-        paymentPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
         var actualPaymentAmount = SQLHelper.getPaymentEntity().getAmount();
         var expectedPaymentAmount = DataHelper.getPaymentAmount();
         Assertions.assertEquals(expectedPaymentAmount, actualPaymentAmount);
     }
 
     @Test
-    @DisplayName("Have the transaction_id's been saved to both tables")
+    @DisplayName("The card from the emulator's base: Have the transaction_id's been saved to both tables")
     void shouldBeSuccess5() {
-        paymentPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
         var transaction_idFromPaymentEntity = SQLHelper.getPaymentEntity().getTransaction_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertFalse(transaction_idFromPaymentEntity.isEmpty());
@@ -106,27 +115,51 @@ public class PaymentTest {
     }
 
     @Test
-    @DisplayName("Are the transaction_id's the same in both tables")
+    @DisplayName("The card from the emulator's base: Are the transaction_id's the same in both tables")
     void shouldBeSuccess6() {
-        paymentPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
         var transaction_idFromPaymentEntity = SQLHelper.getPaymentEntity().getTransaction_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertEquals(transaction_idFromOrderEntity, transaction_idFromPaymentEntity);
     }
 
     @Test
-    @DisplayName("Is order_entity.credit_id empty")
+    @DisplayName("The card from the emulator's base: Is order_entity.credit_id empty")
     void shouldBeSuccess7() {
-        paymentPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
         Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
     }
 
     @Test
-    @DisplayName("Is the credit_request_entity table empty")
+    @DisplayName("The card from the emulator's base: Is the credit_request_entity table empty")
     void shouldBeSuccess8() {
-        paymentPage.proceedTheCard(DataHelper.generateApprovedCardInfo());
-        var idFromCreditRequestEntity = SQLHelper.getCreditRequestEntity().getId();
-        Assertions.assertTrue(idFromCreditRequestEntity.isEmpty());
+        var cardItem = cardItems.get(0);
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
+    }
+
+    @Test
+    @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
+    void shouldBeSuccess9() {
+        paymentPage.proceedTheCard(DataHelper.generateValidCardInfo());
+        paymentPage.shouldBeDeclinedMessage();
+    }
+
+    @Test
+    @DisplayName("The card not from the emulator's base: the payment shouldn't be saved in database")
+    void shouldBeSuccess10() {
+        paymentPage.proceedTheCard(DataHelper.generateValidCardInfo());
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("order_entity"));
+        Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
     }
 }

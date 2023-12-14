@@ -14,7 +14,7 @@ public class FormTest {
 
     @BeforeEach
     void setUp() {
-        var dashboardPage = open("http://localhost:8080", DashboardPage.class);
+        var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
         paymentPage = dashboardPage.choosePayment();
     }
 
@@ -31,7 +31,7 @@ public class FormTest {
         var cardInfo = new DataHelper.CardInfo("", DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.proceedTheCard(cardInfo);
-        paymentPage.shouldBeError("Ошибка");
+        paymentPage.shouldBeError("Неверный формат");
     }
 
     @Test
@@ -40,7 +40,7 @@ public class FormTest {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "", DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.proceedTheCard(cardInfo);
-        paymentPage.shouldBeError("Ошибка");
+        paymentPage.shouldBeError("Неверный формат");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class FormTest {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "",
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.proceedTheCard(cardInfo);
-        paymentPage.shouldBeError("Ошибка");
+        paymentPage.shouldBeError("Неверный формат");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class FormTest {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 "", DataHelper.generateValidCardCVV());
         paymentPage.proceedTheCard(cardInfo);
-        paymentPage.shouldBeError("Ошибка");
+        paymentPage.shouldBeError("Поле обязательно для заполнения");
     }
 
     @Test
@@ -67,6 +67,6 @@ public class FormTest {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), "");
         paymentPage.proceedTheCard(cardInfo);
-        paymentPage.shouldBeError("Ошибка");
+        paymentPage.shouldBeError("Неверный формат");
     }
 }
