@@ -4,6 +4,8 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.aqa.data.DataHelper;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.*;
@@ -14,7 +16,6 @@ public class CreditRequestPage {
     private final ElementsCollection inputFields = $$("input");
     private final ElementsCollection errorMessages = $$(".input__sub");
     private final ElementsCollection buttons = $$("button");
-    private final ElementsCollection visibleNotifications = $$(".notification").filterBy(visible);
     private final SelenideElement notificationApproved = $("div.notification_status_ok");
     private final SelenideElement notificationDeclined = $("div.notification_status_error");
     private final SelenideElement cardNumberField = inputFields.get(0);
@@ -46,16 +47,13 @@ public class CreditRequestPage {
         notificationDeclined.shouldBe(visible);
     }
 
-    public void shouldBeOneMessage() {
-        visibleNotifications.shouldHave(size(1));
-    }
-
-    public void proceedCard(DataHelper.CardInfo cardInfo) {
+    public void proceedTheCard(DataHelper.CardInfo cardInfo) {
         cardNumberField.setValue(cardInfo.getCardNumber());
         cardExpireMonthField.setValue(cardInfo.getCardExpireMonth());
         cardExpireYearField.setValue(cardInfo.getCardExpireYear());
         cardOwnerNameField.setValue(cardInfo.getCardOwnerName());
         cardCVCField.setValue(cardInfo.getCardCVC());
         proceedButton.click();
+        proceedButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(10));
     }
 }

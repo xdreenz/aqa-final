@@ -1,8 +1,11 @@
 package ru.netology.aqa.pages;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.aqa.data.DataHelper;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.CollectionCondition.empty;
@@ -14,7 +17,6 @@ public class PaymentPage {
     private final ElementsCollection inputFields = $$("input");
     private final ElementsCollection errorMessages = $$(".input__sub");
     private final ElementsCollection buttons = $$("button");
-    private final ElementsCollection visibleNotifications = $$(".notification").filterBy(visible);
     private final SelenideElement notificationApproved = $("div.notification_status_ok");
     private final SelenideElement notificationDeclined = $("div.notification_status_error");
     private final SelenideElement cardNumberField = inputFields.get(0);
@@ -31,7 +33,8 @@ public class PaymentPage {
     }
 
     public void shouldBeError(String message) {
-        errorMessages.shouldHave(texts(message));
+
+        errorMessages.findBy(exactText(message)).shouldBe(exist);
     }
 
     public void shouldBeNoErrors() {
@@ -46,16 +49,13 @@ public class PaymentPage {
         notificationDeclined.shouldBe(visible);
     }
 
-    public void shouldBeOneMessage() {
-        visibleNotifications.shouldHave(size(1));
-    }
-
-    public void proceedCard(DataHelper.CardInfo cardInfo) {
+    public void proceedTheCard(DataHelper.CardInfo cardInfo) {
         cardNumberField.setValue(cardInfo.getCardNumber());
         cardExpireMonthField.setValue(cardInfo.getCardExpireMonth());
         cardExpireYearField.setValue(cardInfo.getCardExpireYear());
         cardOwnerNameField.setValue(cardInfo.getCardOwnerName());
         cardCVCField.setValue(cardInfo.getCardCVC());
         proceedButton.click();
+        proceedButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(10));
     }
 }
