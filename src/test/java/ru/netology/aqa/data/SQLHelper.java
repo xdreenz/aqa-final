@@ -1,12 +1,13 @@
 package ru.netology.aqa.data;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SQLHelper {
 
@@ -28,24 +29,59 @@ public class SQLHelper {
     }
 
     @SneakyThrows
-    public static DataHelper.CreditRequestEntity getCreditRequestEntity() {
-        var codeSQL = "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1";
+    public static CreditRequestEntity getCreditRequestEntity() {
+        var codeSQL = "SELECT bank_id, status FROM credit_request_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        return runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.CreditRequestEntity.class));
+        return runner.query(conn, codeSQL, new BeanHandler<>(CreditRequestEntity.class));
     }
 
     @SneakyThrows
-    public static DataHelper.OrderEntity getOrderEntity() {
-        var codeSQL = "SELECT * FROM order_entity ORDER BY created DESC LIMIT 1";
+    public static OrderEntity getOrderEntity() {
+        var codeSQL = "SELECT " +
+                "COALESCE((SELECT credit_id FROM order_entity), '') AS credit_id, " +
+                "COALESCE((SELECT payment_id FROM order_entity), '') AS payment_id " +
+                "FROM order_entity " +
+                "ORDER BY created DESC " +
+                "LIMIT 1";
         var conn = getConn();
-        return runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.OrderEntity.class));
+        return runner.query(conn, codeSQL, new BeanHandler<>(OrderEntity.class));
     }
 
     @SneakyThrows
-    public static DataHelper.PaymentEntity getPaymentEntity() {
-        var codeSQL = "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1";
+    public static PaymentEntity getPaymentEntity() {
+        var codeSQL = "SELECT amount, status, transaction_id FROM payment_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        return runner.query(conn, codeSQL, new BeanHandler<>(DataHelper.PaymentEntity.class));
+        return runner.query(conn, codeSQL, new BeanHandler<>(PaymentEntity.class));
     }
 
+    @SneakyThrows
+    public static Boolean isTheTableEmpty(String tableName) {
+        var codeSQL = "SELECT COUNT(*) FROM " + tableName;
+        var conn = getConn();
+        var result = ((Long)runner.query(conn, codeSQL, new ScalarHandler<>()));
+        return result == 0;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class CreditRequestEntity {
+        private String bank_id;
+        private String status;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class PaymentEntity {
+        private String amount;
+        private String status;
+        private String transaction_id;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class OrderEntity {
+        private String credit_id;
+        private String payment_id;
+
+    }
 }

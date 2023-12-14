@@ -1,6 +1,5 @@
 package ru.netology.aqa.data;
 
-import lombok.Getter;
 import net.datafaker.Faker;
 
 import java.io.File;
@@ -10,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
+import net.datafaker.providers.base.CreditCardType;
 
 public class DataHelper {
     private static final Faker faker = new Faker();
@@ -22,16 +22,18 @@ public class DataHelper {
     }
 
     public static String generateValidCardNumber() {
-        return faker.finance().creditCard();
+        return faker.finance().creditCard(CreditCardType.VISA);
     }
 
     public static String generateValidCardExpireMonth() {
         int randomNumber = faker.number().numberBetween(1, 12);
-        return String.valueOf(randomNumber);
-    }
+        var result = String.valueOf(randomNumber);
+        if (randomNumber < 10) result = "0".concat(result);
+        return result;
+     }
 
     public static String generateValidCardExpireYear() {
-        int randomYear = faker.number().numberBetween(23, 28);
+        int randomYear = faker.number().numberBetween(24, 28);  //Для 23 валиден только один месяц
         return String.valueOf(randomYear);
     }
 
@@ -78,31 +80,5 @@ public class DataHelper {
             this.cardNumber = cardNumber;
             this.cardStatus = cardStatus;
         }
-
-    }
-
-    @Getter
-    public static class CreditRequestEntity {
-        private String id;
-        private String bank_id;
-        private String created;
-        private String status;
-    }
-
-    @Getter
-    public static class PaymentEntity {
-        private String id;
-        private String amount;
-        private String created;
-        private String status;
-        private String transaction_id;
-    }
-
-    @Getter
-    public static class OrderEntity {
-        private String id;
-        private String created;
-        private String credit_id;
-        private String payment_id;
     }
 }
