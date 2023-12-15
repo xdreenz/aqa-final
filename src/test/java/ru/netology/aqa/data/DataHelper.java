@@ -28,7 +28,7 @@ public class DataHelper {
     public static String generateValidCardExpireMonth() {
         int randomNumber = faker.number().numberBetween(1, 12);
         var result = String.valueOf(randomNumber);
-        if (randomNumber < 10) result = "0".concat(result);
+        if (randomNumber < 10) result = "0" + result;
         return result;
      }
 
@@ -38,7 +38,7 @@ public class DataHelper {
     }
 
     public static String generateValidCardOwnerName() {
-        return faker.lorem().characters(20);
+        return faker.name().firstName() + " " + faker.name().lastName();
     }
 
     public static String generateValidCardCVV() {
