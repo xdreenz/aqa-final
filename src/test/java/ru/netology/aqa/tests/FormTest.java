@@ -69,4 +69,49 @@ public class FormTest {
         paymentPage.proceedTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
+
+    @Test
+    @DisplayName("Invalid card number, should be an error")
+    void shouldBeSuccess7() {
+        var cardInfo = new DataHelper.CardInfo("0123", DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
+        paymentPage.shouldBeError("Неверный формат");
+    }
+
+    @Test
+    @DisplayName("Invalid card expire month, should be an error")
+    void shouldBeSuccess8() {
+        var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "25", DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
+        paymentPage.shouldBeError("Неверно указан срок действия карты");
+    }
+
+    @Test
+    @DisplayName("Invalid card expire year, should be an error")
+    void shouldBeSuccess9() {
+        var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "50",
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
+        paymentPage.shouldBeError("Неверно указан срок действия карты");
+    }
+
+    @Test
+    @DisplayName("Invalid card owner name, should be an error")
+    void shouldBeSuccess10() {
+        var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                "шцчяфэъ", DataHelper.generateValidCardCVV());
+        paymentPage.proceedTheCard(cardInfo);
+        paymentPage.shouldBeError("Неверный формат");
+    }
+
+    @Test
+    @DisplayName("Invalid card CVV, should be an error")
+    void shouldBeSuccess11() {
+        var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+                DataHelper.generateValidCardOwnerName(), "1");
+        paymentPage.proceedTheCard(cardInfo);
+        paymentPage.shouldBeError("Неверный формат");
+    }
 }
