@@ -15,8 +15,6 @@ public class DataHelper {
     private static final Faker faker = new Faker();
     public static final String APPROVED_STATUS = "APPROVED";
     public static final String DECLINED_STATUS = "DECLINED";
-    public static final String DataJSONLocation = "gate-emulator/data.json";
-    public static final String localhostURL = "http://localhost:8080";
 
     private DataHelper() {
     }

@@ -12,12 +12,13 @@ import java.sql.*;
 public class SQLHelper {
 
     private static final QueryRunner runner = new QueryRunner();
+    private static final String dbURL = System.getProperty("db.url");
 
     private SQLHelper() {
     }
 
     private static Connection getConn() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "app", "pass");
+        return DriverManager.getConnection(dbURL, "app", "pass");
     }
 
     @SneakyThrows

@@ -19,7 +19,7 @@ public class FormTest {
 
     @BeforeEach
     void setUp() {
-        var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
+        var dashboardPage = open(System.getProperty("aqa-diploma.localhostURL"), DashboardPage.class);
         paymentPage = dashboardPage.choosePaymentOption();
     }
 

@@ -30,4 +30,8 @@ test {
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', true
+    systemProperty 'aqa-diploma.secondsToWait', 10
+    systemProperty 'aqa-diploma.localhostURL', "http://localhost:8080"
+    systemProperty 'aqa-diploma.datajsonLocation', System.getProperty('emulator.data', 'gate-emulator/data.json')
+    systemProperty 'db.url', System.getProperty('db.url', 'jdbc:postgresql://localhost:5432/app')
 }

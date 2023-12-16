@@ -26,6 +26,7 @@ public class CreditRequestPage {
     private final SelenideElement paymentButton = buttons.get(0);
     private final SelenideElement creditButton = buttons.get(1);
     private final SelenideElement proceedButton = buttons.get(2);
+    private final int secondsToWait = Integer.getInteger(System.getProperty("aqa-diploma.secondsToWait"));
 
     public CreditRequestPage() {
         heading.shouldHave(exactText("Кредит по данным карты")).shouldBe(visible);
@@ -54,6 +55,6 @@ public class CreditRequestPage {
         cardOwnerNameField.setValue(cardInfo.getCardOwnerName());
         cardCVCField.setValue(cardInfo.getCardCVC());
         proceedButton.click();
-        proceedButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(10));
+        proceedButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(secondsToWait));
     }
 }

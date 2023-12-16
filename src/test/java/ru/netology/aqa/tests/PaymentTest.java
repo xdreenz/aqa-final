@@ -16,18 +16,19 @@ import static com.codeborne.selenide.Selenide.open;
 public class PaymentTest {
     PaymentPage paymentPage;
     static List<DataHelper.CardItem> cardItems;
+    public static final String DataJSONLocation = System.getProperty("datajsonLocation");
 
     @BeforeAll
     @SneakyThrows
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        cardItems = DataHelper.getCardItemsFromFile(DataHelper.DataJSONLocation);
+        cardItems = DataHelper.getCardItemsFromFile(DataJSONLocation);
     }
 
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
+        var dashboardPage = open(System.getProperty("aqa-diploma.localhostURL"), DashboardPage.class);
         paymentPage = dashboardPage.choosePaymentOption();
     }
 
