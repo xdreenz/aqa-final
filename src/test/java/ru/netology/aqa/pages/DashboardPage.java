@@ -18,12 +18,12 @@ public class DashboardPage {
         heading.shouldHave(exactText("Путешествие дня")).shouldBe(visible);
     }
 
-    public PaymentPage choosePayment() {
+    public PaymentPage choosePaymentOption() {
         paymentButton.click();
         return new PaymentPage();
     }
 
-    public CreditRequestPage chooseCredit() {
+    public CreditRequestPage chooseCreditRequestOption() {
         creditButton.click();
         return new CreditRequestPage();
     }
