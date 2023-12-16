@@ -1,8 +1,8 @@
 package ru.netology.aqa.tests;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.pages.DashboardPage;
 import ru.netology.aqa.pages.PaymentPage;
@@ -12,10 +12,20 @@ import static com.codeborne.selenide.Selenide.open;
 public class FormTest {
     PaymentPage paymentPage;
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
     @BeforeEach
     void setUp() {
         var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
-        paymentPage = dashboardPage.choosePayment();
+        paymentPage = dashboardPage.choosePaymentOption();
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     @Test

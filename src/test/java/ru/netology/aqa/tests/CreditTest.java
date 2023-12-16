@@ -1,5 +1,7 @@
 package ru.netology.aqa.tests;
 
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.*;
 import ru.netology.aqa.data.DataHelper;
@@ -18,6 +20,7 @@ public class CreditTest {
     @BeforeAll
     @SneakyThrows
     static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
         cardItems = DataHelper.getCardItemsFromFile(DataHelper.DataJSONLocation);
     }
 
@@ -25,7 +28,12 @@ public class CreditTest {
     void setUp() {
         SQLHelper.cleanDatabase();
         var dashboardPage = open(DataHelper.localhostURL, DashboardPage.class);
-        creditPage = dashboardPage.chooseCredit();
+        creditPage = dashboardPage.chooseCreditRequestOption();
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     @Test
