@@ -15,6 +15,7 @@ public class DataHelper {
     private static final Faker faker = new Faker();
     public static final String APPROVED_STATUS = "APPROVED";
     public static final String DECLINED_STATUS = "DECLINED";
+    public static final int secondsToWait = 20;
 
     private DataHelper() {
     }

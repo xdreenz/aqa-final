@@ -1,5 +1,6 @@
 package ru.netology.aqa.pages;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -19,6 +20,7 @@ public class PaymentPage {
     private final ElementsCollection buttons = $$("button");
     private final SelenideElement notificationApproved = $("div.notification_status_ok");
     private final SelenideElement notificationDeclined = $("div.notification_status_error");
+    private final ElementsCollection visibleNotifications = $$(".notification").filterBy(visible);
     private final SelenideElement cardNumberField = inputFields.get(0);
     private final SelenideElement cardExpireMonthField = inputFields.get(1);
     private final SelenideElement cardExpireYearField = inputFields.get(2);
@@ -27,7 +29,6 @@ public class PaymentPage {
     private final SelenideElement paymentButton = buttons.get(0);
     private final SelenideElement creditButton = buttons.get(1);
     private final SelenideElement proceedButton = buttons.get(2);
-    private final int secondsToWait = Integer.getInteger(System.getProperty("aqa-diploma.secondsToWait"));
 
     public PaymentPage() {
         heading.shouldHave(exactText("Оплата по карте")).shouldBe(visible);
@@ -50,13 +51,15 @@ public class PaymentPage {
         notificationDeclined.shouldBe(visible);
     }
 
-    public void proceedTheCard(DataHelper.CardInfo cardInfo) {
+    public void proceedTheCard(DataHelper.CardInfo cardInfo, Boolean checkNotification) {
         cardNumberField.setValue(cardInfo.getCardNumber());
         cardExpireMonthField.setValue(cardInfo.getCardExpireMonth());
         cardExpireYearField.setValue(cardInfo.getCardExpireYear());
         cardOwnerNameField.setValue(cardInfo.getCardOwnerName());
         cardCVCField.setValue(cardInfo.getCardCVC());
         proceedButton.click();
-        proceedButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(secondsToWait));
+        proceedButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(DataHelper.secondsToWait));
+        if (checkNotification)
+            visibleNotifications.shouldHave(sizeGreaterThan(0), Duration.ofSeconds(DataHelper.secondsToWait));
     }
 }

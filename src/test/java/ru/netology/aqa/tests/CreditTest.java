@@ -16,19 +16,20 @@ import static com.codeborne.selenide.Selenide.open;
 public class CreditTest {
     CreditRequestPage creditPage;
     static List<DataHelper.CardItem> cardItems;
-    public static final String DataJSONLocation = System.getProperty("datajsonLocation");
+    public static final String datajsonLocation = System.getProperty("aqa-diploma.datajsonLocation");
+    public static final String localhostURL = System.getProperty("aqa-diploma.localhostURL");
 
     @BeforeAll
     @SneakyThrows
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        cardItems = DataHelper.getCardItemsFromFile(DataJSONLocation);
+        cardItems = DataHelper.getCardItemsFromFile(datajsonLocation);
     }
 
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open(System.getProperty("aqa-diploma.localhostURL"), DashboardPage.class);
+        var dashboardPage = open(localhostURL, DashboardPage.class);
         creditPage = dashboardPage.chooseCreditRequestOption();
     }
 
@@ -43,7 +44,7 @@ public class CreditTest {
         var cardItem = cardItems.get(0);    //Номер и статус 1-й карты из БД эмулятора
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
             creditPage.shouldBeApprovedMessage();
         else
@@ -56,7 +57,7 @@ public class CreditTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         var actualCreditRequestStatus = SQLHelper.getCreditRequestEntity().getStatus();
         var expectedCreditRequestStatus = cardItem.getCardStatus();
         Assertions.assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
@@ -68,7 +69,7 @@ public class CreditTest {
         var cardItem = cardItems.get(1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
             creditPage.shouldBeApprovedMessage();
         else
@@ -81,7 +82,7 @@ public class CreditTest {
         var cardItem = cardItems.get(1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         var actualCreditRequestStatus = SQLHelper.getCreditRequestEntity().getStatus();
         var expectedCreditRequestStatus = cardItem.getCardStatus();
         Assertions.assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
@@ -93,7 +94,7 @@ public class CreditTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         var bank_idFromCreditRequestEntity = SQLHelper.getCreditRequestEntity().getBank_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertFalse(bank_idFromCreditRequestEntity.isEmpty());
@@ -106,7 +107,7 @@ public class CreditTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         var bank_idFromCreditEntity = SQLHelper.getCreditRequestEntity().getBank_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
         Assertions.assertEquals(transaction_idFromOrderEntity, bank_idFromCreditEntity);
@@ -118,7 +119,7 @@ public class CreditTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
     }
@@ -129,21 +130,21 @@ public class CreditTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        creditPage.proceedTheCard(cardInfo);
+        creditPage.proceedTheCard(cardInfo, true);
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
     }
 
     @Test
     @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
     void shouldBeSuccess9() {
-        creditPage.proceedTheCard(DataHelper.generateValidCardInfo());
+        creditPage.proceedTheCard(DataHelper.generateValidCardInfo(), true);
         creditPage.shouldBeDeclinedMessage();
     }
 
     @Test
     @DisplayName("The card not from the emulator's base: the credit request shouldn't be saved in database")
     void shouldBeSuccess10() {
-        creditPage.proceedTheCard(DataHelper.generateValidCardInfo());
+        creditPage.proceedTheCard(DataHelper.generateValidCardInfo(), true);
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("order_entity"));
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
