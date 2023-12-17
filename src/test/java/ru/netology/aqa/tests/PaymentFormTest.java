@@ -9,7 +9,7 @@ import ru.netology.aqa.pages.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class FormTest {
+public class PaymentFormTest {
     PaymentPage paymentPage;
 
     @BeforeAll
@@ -31,7 +31,7 @@ public class FormTest {
     @Test
     @DisplayName("Happy path, should be no errors")
     void shouldBeSuccess1() {
-        paymentPage.proceedTheCard(DataHelper.generateValidCardInfo(), false);
+        paymentPage.processTheCard(DataHelper.generateValidCardInfo());
         paymentPage.shouldBeNoErrors();
     }
 
@@ -40,7 +40,7 @@ public class FormTest {
     void shouldBeSuccess2() {
         var cardInfo = new DataHelper.CardInfo("", DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 
@@ -49,7 +49,7 @@ public class FormTest {
     void shouldBeSuccess3() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "", DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 
@@ -58,7 +58,7 @@ public class FormTest {
     void shouldBeSuccess4() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "",
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 
@@ -67,7 +67,7 @@ public class FormTest {
     void shouldBeSuccess5() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 "", DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Поле обязательно для заполнения");
     }
 
@@ -76,7 +76,7 @@ public class FormTest {
     void shouldBeSuccess6() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), "");
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 
@@ -85,7 +85,7 @@ public class FormTest {
     void shouldBeSuccess7() {
         var cardInfo = new DataHelper.CardInfo("0123", DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 
@@ -94,7 +94,7 @@ public class FormTest {
     void shouldBeSuccess8() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "25", DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверно указан срок действия карты");
     }
 
@@ -103,7 +103,7 @@ public class FormTest {
     void shouldBeSuccess9() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "50",
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверно указан срок действия карты");
     }
 
@@ -112,7 +112,7 @@ public class FormTest {
     void shouldBeSuccess10() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 "шцчяфэъ", DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 
@@ -121,7 +121,7 @@ public class FormTest {
     void shouldBeSuccess11() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), "1");
-        paymentPage.proceedTheCard(cardInfo, false);
+        paymentPage.processTheCard(cardInfo);
         paymentPage.shouldBeError("Неверный формат");
     }
 }

@@ -19,7 +19,6 @@ public class PaymentTest {
     public static final String DataJSONLocation = System.getProperty("aqa-diploma.datajsonLocation");
 
     @BeforeAll
-    @SneakyThrows
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         cardItems = DataHelper.getCardItemsFromFile(DataJSONLocation);
@@ -43,7 +42,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
             paymentPage.shouldBeApprovedMessage();
         else
@@ -56,7 +55,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentStatus = SQLHelper.getPaymentEntity().getStatus();
         var expectedPaymentStatus = cardItem.getCardStatus();
         Assertions.assertEquals(expectedPaymentStatus, actualPaymentStatus);
@@ -68,7 +67,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
             paymentPage.shouldBeApprovedMessage();
         else
@@ -81,7 +80,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentStatus = SQLHelper.getPaymentEntity().getStatus();
         var expectedPaymentStatus = cardItem.getCardStatus();
         Assertions.assertEquals(expectedPaymentStatus, actualPaymentStatus);
@@ -93,7 +92,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentAmount = SQLHelper.getPaymentEntity().getAmount();
         Assertions.assertFalse(actualPaymentAmount.isEmpty());
     }
@@ -104,7 +103,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentAmount = SQLHelper.getPaymentEntity().getAmount();
         var expectedPaymentAmount = DataHelper.getPaymentAmount();
         Assertions.assertEquals(expectedPaymentAmount, actualPaymentAmount);
@@ -116,7 +115,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var transaction_idFromPaymentEntity = SQLHelper.getPaymentEntity().getTransaction_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertFalse(transaction_idFromPaymentEntity.isEmpty());
@@ -129,7 +128,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var transaction_idFromPaymentEntity = SQLHelper.getPaymentEntity().getTransaction_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
         Assertions.assertEquals(transaction_idFromOrderEntity, transaction_idFromPaymentEntity);
@@ -141,7 +140,7 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
         Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
     }
@@ -152,21 +151,21 @@ public class PaymentTest {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        paymentPage.proceedTheCard(cardInfo, true);
+        paymentPage.processTheCardAndWait(cardInfo);
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
     }
 
     @Test
     @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
     void shouldBeSuccess9() {
-        paymentPage.proceedTheCard(DataHelper.generateValidCardInfo(), true);
+        paymentPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         paymentPage.shouldBeDeclinedMessage();
     }
 
     @Test
     @DisplayName("The card not from the emulator's base: the payment shouldn't be saved in database")
     void shouldBeSuccess10() {
-        paymentPage.proceedTheCard(DataHelper.generateValidCardInfo(), true);
+        paymentPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("order_entity"));
         Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
