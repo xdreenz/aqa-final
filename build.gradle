@@ -22,7 +22,6 @@ dependencies {
     testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
     testImplementation 'com.mysql:mysql-connector-j:8.2.0'
     testImplementation 'org.postgresql:postgresql:42.7.0'
-    testImplementation 'org.slf4j:slf4j-simple:2.0.9'
 }
 
 test {
