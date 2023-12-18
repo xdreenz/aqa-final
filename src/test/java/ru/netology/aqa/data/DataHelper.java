@@ -51,15 +51,11 @@ public class DataHelper {
         return "4500000";
     }
 
+    @SneakyThrows
     public static List<CardItem> getCardItemsFromFile(String fileName) {
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(fileName);
-        try (FileInputStream fis = new FileInputStream(jsonFile)) {
-            return mapper.readValue(fis, new TypeReference<List<CardItem>>(){});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return mapper.readValue(jsonFile, new TypeReference<>(){});
     }
 
     public static CardInfo generateValidCardInfo() {
