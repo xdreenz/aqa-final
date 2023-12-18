@@ -39,8 +39,8 @@ public class SQLHelper {
     @SneakyThrows
     public static OrderEntity getOrderEntity() {
         var codeSQL = "SELECT " +
-                "COALESCE((SELECT credit_id FROM order_entity), '') AS credit_id, " +
-                "COALESCE((SELECT payment_id FROM order_entity), '') AS payment_id " +
+                "COALESCE(credit_id, '') AS credit_id, " +
+                "COALESCE(payment_id, '') AS payment_id " +
                 "FROM order_entity " +
                 "ORDER BY created DESC " +
                 "LIMIT 1";

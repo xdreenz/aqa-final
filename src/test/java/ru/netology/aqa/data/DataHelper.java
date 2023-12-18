@@ -1,8 +1,11 @@
 package ru.netology.aqa.data;
 
+import lombok.SneakyThrows;
 import net.datafaker.Faker;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -48,10 +51,15 @@ public class DataHelper {
         return "4500000";
     }
 
-    public static List<CardItem> getCardItemsFromFile(String fileName) throws Exception {
+    public static List<CardItem> getCardItemsFromFile(String fileName) {
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(fileName);
-        return mapper.readValue(jsonFile, new TypeReference<>(){});
+        try (FileInputStream fis = new FileInputStream(jsonFile)) {
+            return mapper.readValue(fis, new TypeReference<List<CardItem>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static CardInfo generateValidCardInfo() {
