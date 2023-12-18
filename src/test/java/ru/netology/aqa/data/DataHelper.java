@@ -56,7 +56,7 @@ public class DataHelper {
         File jsonFile = new File(fileName);
         try (FileInputStream fis = new FileInputStream(jsonFile)) {
             return mapper.readValue(fis, new TypeReference<List<CardItem>>(){});
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
