@@ -54,8 +54,7 @@ public class DataHelper {
     @SneakyThrows
     public static List<CardItem> getCardItemsFromFile(String fileName) {
         var mapper = new ObjectMapper();
-        var jsonFile = new File(fileName);
-        return mapper.readValue(jsonFile, new TypeReference<>(){});
+        return mapper.readValue(new File(fileName), new TypeReference<>(){});
     }
 
     public static CardInfo generateValidCardInfo() {
