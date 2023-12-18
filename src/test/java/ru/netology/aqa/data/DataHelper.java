@@ -53,8 +53,8 @@ public class DataHelper {
 
     @SneakyThrows
     public static List<CardItem> getCardItemsFromFile(String fileName) {
-        ObjectMapper mapper = new ObjectMapper();
-        File jsonFile = new File(fileName);
+        var mapper = new ObjectMapper();
+        var jsonFile = new File(fileName);
         return mapper.readValue(jsonFile, new TypeReference<>(){});
     }
 
