@@ -2,7 +2,6 @@ package ru.netology.aqa.tests;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.*;
 import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.data.SQLHelper;

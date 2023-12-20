@@ -31,7 +31,6 @@ public class CreditRequestPage {
     }
 
     public void shouldBeError(String message) {
-//        errorMessages.shouldHave(texts(message));
         $(byText(message)).shouldBe(visible);
     }
 

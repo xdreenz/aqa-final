@@ -4,8 +4,6 @@ import lombok.SneakyThrows;
 import net.datafaker.Faker;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -75,7 +73,6 @@ public class DataHelper {
     public static class CardItem {
         String cardNumber;
         String cardStatus;
-
         public CardItem(
                 @JsonProperty("number") String cardNumber,
                 @JsonProperty("status") String cardStatus) {
