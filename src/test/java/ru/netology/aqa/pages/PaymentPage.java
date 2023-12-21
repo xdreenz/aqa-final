@@ -15,8 +15,8 @@ public class PaymentPage {
     private final SelenideElement heading = $x("/html/body/div[1]/div/h3");
     private final ElementsCollection inputFields = $$("input");
     private final ElementsCollection errorMessages = $$(".input__sub");
-    private final SelenideElement notificationApproved = $("div.notification_status_ok");
-    private final SelenideElement notificationDeclined = $("div.notification_status_error");
+    private final SelenideElement notificationApproved = $(".notification_status_ok");
+    private final SelenideElement notificationDeclined = $(".notification_status_error");
     private final SelenideElement notification = $(".notification");
     private final SelenideElement cardNumberField = inputFields.get(0);
     private final SelenideElement cardExpireMonthField = inputFields.get(1);
