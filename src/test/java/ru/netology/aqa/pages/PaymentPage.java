@@ -6,7 +6,6 @@ import ru.netology.aqa.data.DataHelper;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.CollectionCondition.*;
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Condition.*;
@@ -18,7 +17,7 @@ public class PaymentPage {
     private final ElementsCollection errorMessages = $$(".input__sub");
     private final SelenideElement notificationApproved = $("div.notification_status_ok");
     private final SelenideElement notificationDeclined = $("div.notification_status_error");
-    private final ElementsCollection visibleNotifications = $$(".notification").filterBy(visible);
+    private final SelenideElement notification = $(".notification");
     private final SelenideElement cardNumberField = inputFields.get(0);
     private final SelenideElement cardExpireMonthField = inputFields.get(1);
     private final SelenideElement cardExpireYearField = inputFields.get(2);
@@ -57,7 +56,6 @@ public class PaymentPage {
 
     public void processTheCardAndWait(DataHelper.CardInfo cardInfo) {
         processTheCard(cardInfo);
-        //processButton.shouldNotBe(text("Отправляем запрос в Банк"), Duration.ofSeconds(DataHelper.secondsToWait));
-        visibleNotifications.shouldHave(sizeGreaterThan(0), Duration.ofSeconds(DataHelper.secondsToWait));
+        notification.shouldBe(visible, Duration.ofSeconds(DataHelper.secondsToWait));
     }
 }
