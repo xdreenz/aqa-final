@@ -39,7 +39,6 @@ public class PaymentPage {
     }
 
     public void shouldBeApprovedMessage() {
-//        notificationApproved.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
         notificationApproved.shouldBe(visible, Duration.ofSeconds(secondsToWait));
     }
 
