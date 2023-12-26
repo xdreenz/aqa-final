@@ -24,7 +24,7 @@ public class PaymentPage {
     private final SelenideElement cardOwnerNameField = inputFields.get(3);
     private final SelenideElement cardCVCField = inputFields.get(4);
     private final SelenideElement processButton = $(byText("Продолжить"));
-    private final int SECONDS_TO_WAIT = 20;
+    private final int secondsToWait = Integer.parseInt(System.getProperty("aqa-diploma.secondstowait"));
 
     public PaymentPage() {
         heading.shouldHave(exactText("Оплата по карте")).shouldBe(visible);
@@ -39,11 +39,12 @@ public class PaymentPage {
     }
 
     public void shouldBeApprovedMessage() {
-        notificationApproved.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
+//        notificationApproved.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
+        notificationApproved.shouldBe(visible, Duration.ofSeconds(secondsToWait));
     }
 
     public void shouldBeDeclinedMessage() {
-        notificationDeclined.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
+        notificationDeclined.shouldBe(visible, Duration.ofSeconds(secondsToWait));
     }
 
     public void processTheCard(DataHelper.CardInfo cardInfo) {
@@ -57,6 +58,6 @@ public class PaymentPage {
 
     public void processTheCardAndWait(DataHelper.CardInfo cardInfo) {
         processTheCard(cardInfo);
-        notification.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
+        notification.shouldBe(visible, Duration.ofSeconds(secondsToWait));
     }
 }

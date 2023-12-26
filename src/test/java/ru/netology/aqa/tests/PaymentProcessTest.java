@@ -2,7 +2,6 @@ package ru.netology.aqa.tests;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.data.SQLHelper;
@@ -142,8 +141,7 @@ public class PaymentProcessTest {
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
-//        Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
-        Assertions.assertTrue(StringUtils.isEmpty(credit_idFromOrderEntity));
+        Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
     }
 
     @Test
