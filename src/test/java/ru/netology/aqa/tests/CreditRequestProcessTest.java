@@ -137,7 +137,7 @@ public class CreditRequestProcessTest {
 
     @Test
     @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
-    void unknownCard_DisplayedStatusIsDeclined() {
+    void unknownCard_DisplayedStatusShouldBeDeclined() {
         creditPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         creditPage.shouldBeDeclinedMessage();
     }

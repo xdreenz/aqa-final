@@ -159,14 +159,14 @@ public class PaymentProcessTest {
 
     @Test
     @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
-    void unknownCard_DisplayedStatusIsDeclined() {
+    void unknownCard_DisplayedStatusShouldBeDeclined() {
         paymentPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         paymentPage.shouldBeDeclinedMessage();
     }
 
     @Test
     @DisplayName("The card not from the emulator's base: the payment shouldn't be saved in database")
-    void unknownCard_RequestShouldNotBeSavedAnywhere() {
+    void unknownCard_PaymentShouldNotBeSavedAnywhere() {
         paymentPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         assertAll(
                 () -> assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity")),
