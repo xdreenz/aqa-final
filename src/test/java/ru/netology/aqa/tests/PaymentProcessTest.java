@@ -11,6 +11,7 @@ import ru.netology.aqa.pages.PaymentPage;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PaymentProcessTest {
     PaymentPage paymentPage;
@@ -57,7 +58,7 @@ public class PaymentProcessTest {
         paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentStatus = SQLHelper.getPaymentEntity().getStatus();
         var expectedPaymentStatus = cardItem.getCardStatus();
-        Assertions.assertEquals(expectedPaymentStatus, actualPaymentStatus);
+        assertEquals(expectedPaymentStatus, actualPaymentStatus);
     }
 
     @Test
@@ -82,7 +83,7 @@ public class PaymentProcessTest {
         paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentStatus = SQLHelper.getPaymentEntity().getStatus();
         var expectedPaymentStatus = cardItem.getCardStatus();
-        Assertions.assertEquals(expectedPaymentStatus, actualPaymentStatus);
+        assertEquals(expectedPaymentStatus, actualPaymentStatus);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class PaymentProcessTest {
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentAmount = SQLHelper.getPaymentEntity().getAmount();
-        Assertions.assertFalse(actualPaymentAmount.isEmpty());
+        assertFalse(actualPaymentAmount.isEmpty());
     }
 
     @Test
@@ -105,7 +106,7 @@ public class PaymentProcessTest {
         paymentPage.processTheCardAndWait(cardInfo);
         var actualPaymentAmount = SQLHelper.getPaymentEntity().getAmount();
         var expectedPaymentAmount = DataHelper.getPaymentAmount();
-        Assertions.assertEquals(expectedPaymentAmount, actualPaymentAmount);
+        assertEquals(expectedPaymentAmount, actualPaymentAmount);
     }
 
     @Test
@@ -117,8 +118,10 @@ public class PaymentProcessTest {
         paymentPage.processTheCardAndWait(cardInfo);
         var transaction_idFromPaymentEntity = SQLHelper.getPaymentEntity().getTransaction_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
-        Assertions.assertFalse(transaction_idFromPaymentEntity.isEmpty());
-        Assertions.assertFalse(transaction_idFromOrderEntity.isEmpty());
+        assertAll(
+                () -> assertFalse(transaction_idFromPaymentEntity.isEmpty()),
+                () -> assertFalse(transaction_idFromOrderEntity.isEmpty())
+        );
     }
 
     @Test
@@ -130,7 +133,7 @@ public class PaymentProcessTest {
         paymentPage.processTheCardAndWait(cardInfo);
         var transaction_idFromPaymentEntity = SQLHelper.getPaymentEntity().getTransaction_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
-        Assertions.assertEquals(transaction_idFromOrderEntity, transaction_idFromPaymentEntity);
+        assertEquals(transaction_idFromOrderEntity, transaction_idFromPaymentEntity);
     }
 
     @Test
@@ -141,7 +144,7 @@ public class PaymentProcessTest {
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
-        Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
+        assertTrue(credit_idFromOrderEntity.isEmpty());
     }
 
     @Test
@@ -151,7 +154,7 @@ public class PaymentProcessTest {
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
+        assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
     }
 
     @Test
@@ -165,8 +168,10 @@ public class PaymentProcessTest {
     @DisplayName("The card not from the emulator's base: the payment shouldn't be saved in database")
     void unknownCard_RequestShouldNotBeSavedAnywhere() {
         paymentPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("order_entity"));
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
+        assertAll(
+                () -> assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity")),
+                () -> assertTrue(SQLHelper.isTheTableEmpty("order_entity")),
+                () -> assertTrue(SQLHelper.isTheTableEmpty("payment_entity"))
+        );
     }
 }

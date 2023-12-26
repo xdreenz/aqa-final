@@ -11,6 +11,7 @@ import ru.netology.aqa.pages.CreditRequestPage;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CreditRequestProcessTest {
     CreditRequestPage creditPage;
@@ -58,7 +59,7 @@ public class CreditRequestProcessTest {
         creditPage.processTheCardAndWait(cardInfo);
         var actualCreditRequestStatus = SQLHelper.getCreditRequestEntity().getStatus();
         var expectedCreditRequestStatus = cardItem.getCardStatus();
-        Assertions.assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
+        assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
     }
 
     @Test
@@ -83,7 +84,7 @@ public class CreditRequestProcessTest {
         creditPage.processTheCardAndWait(cardInfo);
         var actualCreditRequestStatus = SQLHelper.getCreditRequestEntity().getStatus();
         var expectedCreditRequestStatus = cardItem.getCardStatus();
-        Assertions.assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
+        assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
     }
 
     @Test
@@ -95,8 +96,10 @@ public class CreditRequestProcessTest {
         creditPage.processTheCardAndWait(cardInfo);
         var bank_idFromCreditRequestEntity = SQLHelper.getCreditRequestEntity().getBank_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
-        Assertions.assertFalse(bank_idFromCreditRequestEntity.isEmpty());
-        Assertions.assertFalse(transaction_idFromOrderEntity.isEmpty());
+        assertAll(
+                () -> assertFalse(bank_idFromCreditRequestEntity.isEmpty()),
+                () -> assertFalse(transaction_idFromOrderEntity.isEmpty())
+        );
     }
 
     @Test
@@ -108,7 +111,7 @@ public class CreditRequestProcessTest {
         creditPage.processTheCardAndWait(cardInfo);
         var bank_idFromCreditEntity = SQLHelper.getCreditRequestEntity().getBank_id();
         var transaction_idFromOrderEntity = SQLHelper.getOrderEntity().getCredit_id();
-        Assertions.assertEquals(transaction_idFromOrderEntity, bank_idFromCreditEntity);
+        assertEquals(transaction_idFromOrderEntity, bank_idFromCreditEntity);
     }
 
     @Test
@@ -119,7 +122,7 @@ public class CreditRequestProcessTest {
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
-        Assertions.assertTrue(credit_idFromOrderEntity.isEmpty());
+        assertTrue(credit_idFromOrderEntity.isEmpty());
     }
 
     @Test
@@ -129,7 +132,7 @@ public class CreditRequestProcessTest {
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
+        assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
     }
 
     @Test
@@ -143,8 +146,10 @@ public class CreditRequestProcessTest {
     @DisplayName("The card not from the emulator's base: the credit request shouldn't be saved in database")
     void unknownCard_RequestShouldNotBeSavedAnywhere() {
         creditPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity"));
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("order_entity"));
-        Assertions.assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
+        assertAll(
+                () -> assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity")),
+                () -> assertTrue(SQLHelper.isTheTableEmpty("order_entity")),
+                () -> assertTrue(SQLHelper.isTheTableEmpty("payment_entity"))
+        );
     }
 }
