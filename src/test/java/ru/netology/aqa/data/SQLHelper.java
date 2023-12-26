@@ -13,12 +13,15 @@ public class SQLHelper {
 
     private static final QueryRunner runner = new QueryRunner();
     private static final String dbURL = System.getProperty("db.url");
+    private static final String dbUser = System.getProperty("db.user");
+    private static final String dbPass = System.getProperty("db.password");
 
     private SQLHelper() {
     }
 
-    private static Connection getConn() throws SQLException {
-        return DriverManager.getConnection(dbURL, "app", "pass");
+    @SneakyThrows
+    private static Connection getConn() {
+        return DriverManager.getConnection(dbURL, dbUser, dbPass);
     }
 
     @SneakyThrows

@@ -20,6 +20,7 @@ dependencies {
     testImplementation 'net.datafaker:datafaker:1.9.0'
     testImplementation 'commons-dbutils:commons-dbutils:1.8.1'
     testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
+    testImplementation 'org.apache.commons:commons-lang3:3.14.0'
     testImplementation 'com.mysql:mysql-connector-j:8.2.0'
     testImplementation 'org.postgresql:postgresql:42.7.0'
 }
@@ -32,4 +33,6 @@ test {
     systemProperty 'aqa-diploma.localhostURL', 'http://localhost:8080'
     systemProperty 'aqa-diploma.datajsonLocation', System.getProperty('emulator.data', 'gate-emulator/data.json')
     systemProperty 'db.url', System.getProperty('db.url', 'jdbc:mysql://localhost:3306/app')
+    systemProperty 'db.user', System.getProperty('db.user', 'app')
+    systemProperty 'db.password', System.getProperty('db.password', 'pass')
 }

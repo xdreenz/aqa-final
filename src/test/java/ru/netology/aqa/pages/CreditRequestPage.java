@@ -24,6 +24,7 @@ public class CreditRequestPage {
     private final SelenideElement cardOwnerNameField = inputFields.get(3);
     private final SelenideElement cardCVCField = inputFields.get(4);
     private final SelenideElement processButton = $(byText("Продолжить"));
+    private final int SECONDS_TO_WAIT = 20;
 
     public CreditRequestPage() {
         heading.shouldHave(exactText("Кредит по данным карты")).shouldBe(visible);
@@ -38,11 +39,11 @@ public class CreditRequestPage {
     }
 
     public void shouldBeApprovedMessage() {
-        notificationApproved.shouldBe(visible);
+        notificationApproved.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
     }
 
     public void shouldBeDeclinedMessage() {
-        notificationDeclined.shouldBe(visible);
+        notificationDeclined.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
     }
 
     public void processTheCard(DataHelper.CardInfo cardInfo) {
@@ -56,6 +57,6 @@ public class CreditRequestPage {
 
     public void processTheCardAndWait(DataHelper.CardInfo cardInfo) {
         processTheCard(cardInfo);
-        notification.shouldBe(visible, Duration.ofSeconds(DataHelper.secondsToWait));
+        notification.shouldBe(visible, Duration.ofSeconds(SECONDS_TO_WAIT));
     }
 }

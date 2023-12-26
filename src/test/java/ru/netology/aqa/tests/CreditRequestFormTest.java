@@ -30,14 +30,14 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("Happy path, should be no errors")
-    void shouldBeSuccess1() {
+    void happyPath_ShouldBeNoErrors() {
         creditPage.processTheCard(DataHelper.generateValidCardInfo());
         creditPage.shouldBeNoErrors();
     }
 
     @Test
     @DisplayName("No card number, should be an error")
-    void shouldBeSuccess2() {
+    void noCardNumber_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo("", DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -46,7 +46,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("No card expire month, should be an error")
-    void shouldBeSuccess3() {
+    void noCardExpireMonth_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "", DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -55,7 +55,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("No card expire year, should be an error")
-    void shouldBeSuccess4() {
+    void noCardExpireYear_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "",
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -64,7 +64,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("No card owner name, should be an error")
-    void shouldBeSuccess5() {
+    void noCardOwnerName_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 "", DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -73,7 +73,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("No card CVV, should be an error")
-    void shouldBeSuccess6() {
+    void noCardCVV_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), "");
         creditPage.processTheCard(cardInfo);
@@ -82,7 +82,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("Invalid card number, should be an error")
-    void shouldBeSuccess7() {
+    void invalidCardNumber_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo("0123", DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -91,7 +91,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("Invalid card expire month, should be an error")
-    void shouldBeSuccess8() {
+    void invalidCardExpireMonth_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "25", DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -100,7 +100,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("Invalid card expire year, should be an error")
-    void shouldBeSuccess9() {
+    void invalidCardExpireYear_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "50",
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -109,7 +109,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("Invalid card owner name, should be an error")
-    void shouldBeSuccess10() {
+    void invalidCardOwnerName_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 "шцчяфэъ", DataHelper.generateValidCardCVV());
         creditPage.processTheCard(cardInfo);
@@ -118,7 +118,7 @@ public class CreditRequestFormTest {
 
     @Test
     @DisplayName("Invalid card CVV, should be an error")
-    void shouldBeSuccess11() {
+    void invalidCardCVV_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), "1");
         creditPage.processTheCard(cardInfo);

@@ -16,7 +16,6 @@ public class DataHelper {
     private static final Faker faker = new Faker();
     public static final String APPROVED_STATUS = "APPROVED";
     public static final String DECLINED_STATUS = "DECLINED";
-    public static final int secondsToWait = 20;
 
     private DataHelper() {
     }
@@ -30,7 +29,7 @@ public class DataHelper {
         var result = String.valueOf(randomNumber);
         if (randomNumber < 10) result = "0" + result;
         return result;
-     }
+    }
 
     public static String generateValidCardExpireYear() {
         int randomYear = faker.number().numberBetween(24, 28);  //Для 23 валиден только один месяц
