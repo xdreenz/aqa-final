@@ -41,12 +41,7 @@ public class SQLHelper {
 
     @SneakyThrows
     public static OrderEntity getOrderEntity() {
-        var codeSQL = "SELECT " +
-                "COALESCE(credit_id, '') AS credit_id, " +
-                "COALESCE(payment_id, '') AS payment_id " +
-                "FROM order_entity " +
-                "ORDER BY created DESC " +
-                "LIMIT 1";
+        var codeSQL = "SELECT credit_id, payment_id FROM order_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
         return runner.query(conn, codeSQL, new BeanHandler<>(OrderEntity.class));
     }
