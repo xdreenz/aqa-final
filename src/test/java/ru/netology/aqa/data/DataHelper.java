@@ -11,11 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 import net.datafaker.providers.base.CreditCardType;
+import org.apache.commons.lang3.StringUtils;
 
 public class DataHelper {
     private static final Faker faker = new Faker();
     public static final String APPROVED_STATUS = "APPROVED";
-    public static final String DECLINED_STATUS = "DECLINED";
 
     private DataHelper() {
     }
@@ -27,8 +27,7 @@ public class DataHelper {
     public static String generateValidCardExpireMonth() {
         int randomNumber = faker.number().numberBetween(1, 12);
         var result = String.valueOf(randomNumber);
-        if (randomNumber < 10) result = "0" + result;
-        return result;
+        return StringUtils.leftPad(result, 2, "0");
     }
 
     public static String generateValidCardExpireYear() {
