@@ -13,21 +13,20 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class CreditRequestPage {
     private final SelenideElement heading = $x("/html/body/div[1]/div/h3");
-    private final ElementsCollection inputFields = $$("input");
     private final ElementsCollection errorMessages = $$(".input__sub");
     private final SelenideElement notificationApproved = $(".notification_status_ok");
     private final SelenideElement notificationDeclined = $(".notification_status_error");
     private final SelenideElement notification = $(".notification");
-    private final SelenideElement cardNumberField = inputFields.get(0);
-    private final SelenideElement cardExpireMonthField = inputFields.get(1);
-    private final SelenideElement cardExpireYearField = inputFields.get(2);
-    private final SelenideElement cardOwnerNameField = inputFields.get(3);
-    private final SelenideElement cardCVCField = inputFields.get(4);
+    private final SelenideElement cardNumberField = $("input", 0);
+    private final SelenideElement cardExpireMonthField = $("input", 1);
+    private final SelenideElement cardExpireYearField = $("input", 2);
+    private final SelenideElement cardOwnerNameField = $("input", 3);
+    private final SelenideElement cardCVCField = $("input", 4);
     private final SelenideElement processButton = $(byText("Продолжить"));
     private final int secondsToWait = Integer.parseInt(System.getProperty("aqa-diploma.secondstowait"));
 
     public CreditRequestPage() {
-        heading.shouldHave(exactText("Кредит по данным карты")).shouldBe(visible);
+        heading.shouldHave(exactTextCaseSensitive("Кредит по данным карты")).shouldBe(visible);
     }
 
     public void shouldBeError(String message) {

@@ -57,7 +57,7 @@ public class SQLHelper {
     public static Boolean isTheTableEmpty(String tableName) {
         var codeSQL = "SELECT COUNT(*) FROM " + tableName;
         var conn = getConn();
-        var result = ((Long)runner.query(conn, codeSQL, new ScalarHandler<>()));
+        long result = runner.query(conn, codeSQL, new ScalarHandler<>());
         return result == 0;
     }
 

@@ -31,7 +31,7 @@ public class DataHelper {
     }
 
     public static String generateValidCardExpireYear() {
-        int randomYear = faker.number().numberBetween(24, 28);  //Для 23 валиден только один месяц
+        int randomYear = faker.number().numberBetween(24, 28);
         return String.valueOf(randomYear);
     }
 
