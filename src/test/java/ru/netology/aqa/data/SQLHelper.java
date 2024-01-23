@@ -2,7 +2,6 @@ package ru.netology.aqa.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
@@ -19,45 +18,64 @@ public class SQLHelper {
     private SQLHelper() {
     }
 
-    @SneakyThrows
     private static Connection getConn() {
-        return DriverManager.getConnection(dbURL, dbUser, dbPass);
+        try {
+            return DriverManager.getConnection(dbURL, dbUser, dbPass);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @SneakyThrows
     public static void cleanDatabase() {
         var conn = getConn();
-        runner.execute(conn, "DELETE FROM order_entity");
-        runner.execute(conn, "DELETE FROM payment_entity");
-        runner.execute(conn, "DELETE FROM credit_request_entity");
+        try {
+            runner.execute(conn, "DELETE FROM order_entity");
+            runner.execute(conn, "DELETE FROM payment_entity");
+            runner.execute(conn, "DELETE FROM credit_request_entity");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @SneakyThrows
     public static CreditRequestEntity getCreditRequestEntity() {
         var codeSQL = "SELECT bank_id, status FROM credit_request_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        return runner.query(conn, codeSQL, new BeanHandler<>(CreditRequestEntity.class));
+        try {
+            return runner.query(conn, codeSQL, new BeanHandler<>(CreditRequestEntity.class));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @SneakyThrows
     public static OrderEntity getOrderEntity() {
         var codeSQL = "SELECT credit_id, payment_id FROM order_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        return runner.query(conn, codeSQL, new BeanHandler<>(OrderEntity.class));
+        try {
+            return runner.query(conn, codeSQL, new BeanHandler<>(OrderEntity.class));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @SneakyThrows
     public static PaymentEntity getPaymentEntity() {
         var codeSQL = "SELECT amount, status, transaction_id FROM payment_entity ORDER BY created DESC LIMIT 1";
         var conn = getConn();
-        return runner.query(conn, codeSQL, new BeanHandler<>(PaymentEntity.class));
+        try {
+            return runner.query(conn, codeSQL, new BeanHandler<>(PaymentEntity.class));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @SneakyThrows
     public static Boolean isTheTableEmpty(String tableName) {
         var codeSQL = "SELECT COUNT(*) FROM " + tableName;
         var conn = getConn();
-        long result = runner.query(conn, codeSQL, new ScalarHandler<>());
+        long result = 0;
+        try {
+            result = runner.query(conn, codeSQL, new ScalarHandler<>());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return result == 0;
     }
 

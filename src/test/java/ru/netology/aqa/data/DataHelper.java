@@ -1,16 +1,16 @@
 package ru.netology.aqa.data;
 
-import lombok.SneakyThrows;
 import net.datafaker.Faker;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
-import net.datafaker.providers.base.CreditCardType;
+import net.datafaker.providers.base.Finance;
 import org.apache.commons.lang3.StringUtils;
 
 public class DataHelper {
@@ -21,7 +21,7 @@ public class DataHelper {
     }
 
     public static String generateValidCardNumber() {
-        return faker.finance().creditCard(CreditCardType.VISA);
+        return faker.finance().creditCard(Finance.CreditCardType.VISA);
     }
 
     public static String generateValidCardExpireMonth() {
@@ -47,8 +47,7 @@ public class DataHelper {
         return "4500000";
     }
 
-    @SneakyThrows
-    public static List<CardItem> getCardItemsFromFile(String fileName) {
+    public static List<CardItem> getCardItemsFromFile(String fileName) throws IOException {
         var mapper = new ObjectMapper();
         return mapper.readValue(new File(fileName), new TypeReference<>(){});
     }

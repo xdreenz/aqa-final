@@ -9,6 +9,7 @@ import ru.netology.aqa.data.SQLHelper;
 import ru.netology.aqa.pages.DashboardPage;
 import ru.netology.aqa.pages.CreditRequestPage;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -23,7 +24,11 @@ public class CreditRequestProcessTest {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        cardItems = DataHelper.getCardItemsFromFile(datajsonLocation);
+        try {
+            cardItems = DataHelper.getCardItemsFromFile(datajsonLocation);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @BeforeEach

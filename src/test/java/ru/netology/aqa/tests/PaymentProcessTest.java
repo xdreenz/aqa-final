@@ -1,6 +1,9 @@
 package ru.netology.aqa.tests;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
@@ -9,6 +12,7 @@ import ru.netology.aqa.data.SQLHelper;
 import ru.netology.aqa.pages.DashboardPage;
 import ru.netology.aqa.pages.PaymentPage;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -22,7 +26,11 @@ public class PaymentProcessTest {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        cardItems = DataHelper.getCardItemsFromFile(DataJSONLocation);
+        try {
+            cardItems = DataHelper.getCardItemsFromFile(DataJSONLocation);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @BeforeEach
@@ -38,11 +46,15 @@ public class PaymentProcessTest {
     }
 
     @Test
+    @Severity(SeverityLevel.NORMAL)
     @DisplayName("Card №1 from the emulator's base: does its displayed status equal the correct one received from the emulator")
-    void card1DisplayedStatus_ShouldBeEqualToTheCorrect() {
+    @Description("1. Получаем номер и эталонный статус карты из БД эмулятора" +
+    "\n2. Дополняем их остальными валидными данными и отправляем" +
+    "\n3. Сравниваем отображаемый статус с эталонным")
+    void card1DisplayedStatusShouldBeEqualToTheCorrect() {
         var cardItem = cardItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
-                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
+                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
         if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
             paymentPage.shouldBeApprovedMessage();
