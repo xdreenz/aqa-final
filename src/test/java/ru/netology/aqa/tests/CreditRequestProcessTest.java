@@ -4,6 +4,8 @@ import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.data.SQLHelper;
 import ru.netology.aqa.pages.DashboardPage;
@@ -11,6 +13,7 @@ import ru.netology.aqa.pages.CreditRequestPage;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CreditRequestProcessTest {
     CreditRequestPage creditPage;
     static List<DataHelper.CardItem> cardItems;
+    static int testsToRepeat;
     public static final String datajsonLocation = System.getProperty("aqa-diploma.datajsonLocation");
     public static final String localhostURL = System.getProperty("aqa-diploma.localhostURL");
 
@@ -29,6 +33,7 @@ public class CreditRequestProcessTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        testsToRepeat = cardItems.size();
     }
 
     @BeforeEach
@@ -43,35 +48,15 @@ public class CreditRequestProcessTest {
         SelenideLogger.removeListener("allure");
     }
 
-    @Test
-    @DisplayName("Card №1 from the emulator's base: does its displayed status equal the correct one received from the emulator")
-    void card1DisplayedStatus_ShouldBeEqualToTheCorrect() {
-        var cardItem = cardItems.get(0);    //Номер и статус 1-й карты из БД эмулятора
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
-                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());    //Дополняю номер карты остальными валидными данными
-        creditPage.processTheCardAndWait(cardInfo);
-        if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
-            creditPage.shouldBeApprovedMessage();
-        else
-            creditPage.shouldBeDeclinedMessage();
-    }
+    private static IntStream repeatTest() {
+        return IntStream.range(1, testsToRepeat + 1);
+    }   //+1 ко всему - костыль, чтобы номера карт выводились с 1
 
-    @Test
-    @DisplayName("Card №1 from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
-    void card1SavedStatus_ShouldBeEqualToTheCorrect() {
-        var cardItem = cardItems.get(0);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
-                DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
-        creditPage.processTheCardAndWait(cardInfo);
-        var actualCreditRequestStatus = SQLHelper.getCreditRequestEntity().getStatus();
-        var expectedCreditRequestStatus = cardItem.getCardStatus();
-        assertEquals(expectedCreditRequestStatus, actualCreditRequestStatus);
-    }
-
-    @Test
-    @DisplayName("Card №2 from the emulator's base: does its displayed status equal the correct one received from the emulator")
-    void card2DisplayedStatus_ShouldBeEqualToTheCorrect() {
-        var cardItem = cardItems.get(1);
+    @ParameterizedTest(name = "Card №{0}")
+    @MethodSource("repeatTest")
+    @DisplayName("Cards from the emulator's base: does its displayed status equal the correct one received from the emulator")
+    void card1DisplayedStatus_ShouldBeEqualToTheCorrect(int repeats) {
+        var cardItem = cardItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
@@ -81,10 +66,11 @@ public class CreditRequestProcessTest {
             creditPage.shouldBeDeclinedMessage();
     }
 
-    @Test
-    @DisplayName("Card №2 from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
-    void card2SavedStatus_ShouldBeEqualToTheCorrect() {
-        var cardItem = cardItems.get(1);
+    @ParameterizedTest(name = "Card №{0}")
+    @MethodSource("repeatTest")
+    @DisplayName("Cards from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
+    void card1SavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
+        var cardItem = cardItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
