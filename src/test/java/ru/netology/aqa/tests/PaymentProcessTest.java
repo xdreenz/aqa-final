@@ -54,7 +54,7 @@ public class PaymentProcessTest {
     @ParameterizedTest(name = "Card №{0}")
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its displayed status equal the correct one received from the emulator")
-    void card1DisplayedStatusShouldBeEqualToTheCorrect(int repeats) {
+    void cardDisplayedStatusShouldBeEqualToTheCorrect(int repeats) {
         var cardItem = dataJsonItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -68,7 +68,7 @@ public class PaymentProcessTest {
     @ParameterizedTest(name = "Card №{0}")
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
-    void card1SavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
+    void cardSavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
         var cardItem = dataJsonItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
