@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   mysql:
-    image: mysql:8.0.35
+    image: mysql:8.0.36
     restart: unless-stopped
     ports:
       - '3306:3306'
@@ -11,7 +11,7 @@ services:
       - MYSQL_USER=app
       - MYSQL_PASSWORD=pass
   postgres:
-    image: postgres:16.1-alpine
+    image: postgres:14.10-alpine
     restart: unless-stopped
     ports:
       - '5432:5432'

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PaymentProcessTest {
     PaymentPage paymentPage;
-    static List<DataHelper.CardItem> cardItems;
+    static List<DataHelper.DataJsonItem> dataJsonItems;
     static int testsToRepeat;
     public static final String DataJSONLocation = System.getProperty("aqa-diploma.datajsonLocation");
 
@@ -28,11 +28,11 @@ public class PaymentProcessTest {
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         try {
-            cardItems = DataHelper.getCardItemsFromFile(DataJSONLocation);
+            dataJsonItems = DataHelper.getDataJsonItems(DataJSONLocation);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        testsToRepeat = cardItems.size();
+        testsToRepeat = dataJsonItems.size();
     }
 
     @BeforeEach
@@ -55,7 +55,7 @@ public class PaymentProcessTest {
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its displayed status equal the correct one received from the emulator")
     void card1DisplayedStatusShouldBeEqualToTheCorrect(int repeats) {
-        var cardItem = cardItems.get(repeats - 1);
+        var cardItem = dataJsonItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -69,7 +69,7 @@ public class PaymentProcessTest {
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
     void card1SavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
-        var cardItem = cardItems.get(repeats - 1);
+        var cardItem = dataJsonItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -81,7 +81,7 @@ public class PaymentProcessTest {
     @Test
     @DisplayName("The card from the emulator's base: Have the payment amount been saved")
     void knownCard_PaymentAmountShouldBeSaved() {
-        var cardItem = cardItems.get(0);
+        var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -92,7 +92,7 @@ public class PaymentProcessTest {
     @Test
     @DisplayName("The card from the emulator's base: Have the payment amount been saved correctly")
     void knownCard_SavedPaymentAmountShouldBeCorrect() {
-        var cardItem = cardItems.get(0);
+        var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -104,7 +104,7 @@ public class PaymentProcessTest {
     @Test
     @DisplayName("The card from the emulator's base: Have the transaction_id's been saved to both tables")
     void transaction_id_ShouldBeSaved() {
-        var cardItem = cardItems.get(0);
+        var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -119,7 +119,7 @@ public class PaymentProcessTest {
     @Test
     @DisplayName("The card from the emulator's base: Are the transaction_id's the same in both tables")
     void transaction_id_TheSameInBothTables() {
-        var cardItem = cardItems.get(0);
+        var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -131,7 +131,7 @@ public class PaymentProcessTest {
     @Test
     @DisplayName("The card from the emulator's base: Is order_entity.credit_id empty")
     void order_entity_credit_id_IsEmpty() {
-        var cardItem = cardItems.get(0);
+        var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);
@@ -142,7 +142,7 @@ public class PaymentProcessTest {
     @Test
     @DisplayName("The card from the emulator's base: Is the credit_request_entity table empty")
     void credit_request_entity_Table_IsEmpty() {
-        var cardItem = cardItems.get(0);
+        var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         paymentPage.processTheCardAndWait(cardInfo);

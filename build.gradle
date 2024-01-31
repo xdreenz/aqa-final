@@ -4,7 +4,7 @@ plugins {
     id 'io.qameta.allure' version '2.11.2'
 }
 
-group = 'ru.netology'
+group = 'org.example'
 version = '1.2'
 
 repositories {
@@ -16,6 +16,13 @@ compileJava {
 }
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+tasks {
+    wrapper {
+        gradleVersion = '8.5'
+        distributionType = Wrapper.DistributionType.ALL
+    }
 }
 
 dependencies {

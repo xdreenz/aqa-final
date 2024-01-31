@@ -68,15 +68,15 @@ public class SQLHelper {
     }
 
     public static Boolean isTheTableEmpty(String tableName) {
+        Integer result;
         var codeSQL = "SELECT COUNT(*) FROM " + tableName;
         var conn = getConn();
-        long result = 0;
         try {
             result = runner.query(conn, codeSQL, new ScalarHandler<>());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return result == 0;
+        return result.equals(0);
     }
 
     @Data

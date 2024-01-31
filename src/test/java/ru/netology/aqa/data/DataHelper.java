@@ -47,7 +47,7 @@ public class DataHelper {
         return "4500000";
     }
 
-    public static List<CardItem> getCardItemsFromFile(String fileName) throws IOException {
+    public static List<DataJsonItem> getDataJsonItems(String fileName) throws IOException {
         var mapper = new ObjectMapper();
         return mapper.readValue(new File(fileName), new TypeReference<>(){});
     }
@@ -67,10 +67,10 @@ public class DataHelper {
     }
 
     @Value
-    public static class CardItem {
+    public static class DataJsonItem {
         String cardNumber;
         String cardStatus;
-        public CardItem(
+        public DataJsonItem(
                 @JsonProperty("number") String cardNumber,
                 @JsonProperty("status") String cardStatus) {
             this.cardNumber = cardNumber;
