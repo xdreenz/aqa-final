@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.netology.aqa.data.Config;
 import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.data.SQLHelper;
 import ru.netology.aqa.pages.DashboardPage;
@@ -22,14 +23,12 @@ public class CreditRequestProcessTest {
     CreditRequestPage creditPage;
     static List<DataHelper.DataJsonItem> dataJsonItems;
     static int testsToRepeat;
-    public static final String datajsonLocation = System.getProperty("aqa-diploma.datajsonLocation");
-    public static final String localhostURL = System.getProperty("aqa-diploma.localhostURL");
 
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         try {
-            dataJsonItems = DataHelper.getDataJsonItems(datajsonLocation);
+            dataJsonItems = DataHelper.getDataJsonItems(Config.datajsonLocation);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -39,7 +38,7 @@ public class CreditRequestProcessTest {
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open(localhostURL, DashboardPage.class);
+        var dashboardPage = open(Config.localhostURL, DashboardPage.class);
         creditPage = dashboardPage.chooseCreditRequestOption();
     }
 

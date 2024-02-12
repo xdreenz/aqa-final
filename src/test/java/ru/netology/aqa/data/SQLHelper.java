@@ -11,16 +11,13 @@ import java.sql.*;
 public class SQLHelper {
 
     private static final QueryRunner runner = new QueryRunner();
-    private static final String dbURL = System.getProperty("db.url");
-    private static final String dbUser = System.getProperty("db.user");
-    private static final String dbPass = System.getProperty("db.password");
 
     private SQLHelper() {
     }
 
     private static Connection getConn() {
         try {
-            return DriverManager.getConnection(dbURL, dbUser, dbPass);
+            return DriverManager.getConnection(Config.dbURL, Config.dbUser, Config.dbPassword);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

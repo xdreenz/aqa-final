@@ -10,6 +10,7 @@ import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.data.SQLHelper;
 import ru.netology.aqa.pages.DashboardPage;
 import ru.netology.aqa.pages.PaymentPage;
+import ru.netology.aqa.data.Config;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,13 +23,12 @@ public class PaymentProcessTest {
     PaymentPage paymentPage;
     static List<DataHelper.DataJsonItem> dataJsonItems;
     static int testsToRepeat;
-    public static final String DataJSONLocation = System.getProperty("aqa-diploma.datajsonLocation");
 
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         try {
-            dataJsonItems = DataHelper.getDataJsonItems(DataJSONLocation);
+            dataJsonItems = DataHelper.getDataJsonItems(Config.datajsonLocation);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +38,7 @@ public class PaymentProcessTest {
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open(System.getProperty("aqa-diploma.localhostURL"), DashboardPage.class);
+        var dashboardPage = open(Config.localhostURL, DashboardPage.class);
         paymentPage = dashboardPage.choosePaymentOption();
     }
 

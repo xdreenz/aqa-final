@@ -3,6 +3,7 @@ package ru.netology.aqa.pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.aqa.data.DataHelper;
+import ru.netology.aqa.data.Config;
 
 import java.time.Duration;
 
@@ -23,7 +24,6 @@ public class PaymentPage {
     private final SelenideElement cardOwnerNameField = $("input", 3);
     private final SelenideElement cardCVCField = $("input", 4);
     private final SelenideElement processButton = $(byText("Продолжить"));
-    private final int secondsToWait = Integer.parseInt(System.getProperty("aqa-diploma.secondstowait"));
 
     public PaymentPage() {
         heading.shouldHave(exactTextCaseSensitive("Оплата по карте")).shouldBe(visible);
@@ -38,11 +38,11 @@ public class PaymentPage {
     }
 
     public void shouldBeApprovedMessage() {
-        notificationApproved.shouldBe(visible, Duration.ofSeconds(secondsToWait));
+        notificationApproved.shouldBe(visible, Duration.ofSeconds(Config.secondstowait));
     }
 
     public void shouldBeDeclinedMessage() {
-        notificationDeclined.shouldBe(visible, Duration.ofSeconds(secondsToWait));
+        notificationDeclined.shouldBe(visible, Duration.ofSeconds(Config.secondstowait));
     }
 
     public void processTheCard(DataHelper.CardInfo cardInfo) {
@@ -56,6 +56,6 @@ public class PaymentPage {
 
     public void processTheCardAndWait(DataHelper.CardInfo cardInfo) {
         processTheCard(cardInfo);
-        notification.shouldBe(visible, Duration.ofSeconds(secondsToWait));
+        notification.shouldBe(visible, Duration.ofSeconds(Config.secondstowait));
     }
 }
