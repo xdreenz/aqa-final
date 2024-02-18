@@ -9,11 +9,12 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byTagAndText;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class CreditRequestPage {
-    private final SelenideElement heading = $x("/html/body/div[1]/div/h3");
+    private final SelenideElement heading = $(byTagAndText("h3", "Кредит по данным карты"));
     private final ElementsCollection errorMessages = $$(".input__sub");
     private final SelenideElement notificationApproved = $(".notification_status_ok");
     private final SelenideElement notificationDeclined = $(".notification_status_error");
@@ -26,7 +27,7 @@ public class CreditRequestPage {
     private final SelenideElement processButton = $(byText("Продолжить"));
 
     public CreditRequestPage() {
-        heading.shouldHave(exactTextCaseSensitive("Кредит по данным карты")).shouldBe(visible);
+        heading.shouldBe(visible);
     }
 
     public void shouldBeError(String message) {

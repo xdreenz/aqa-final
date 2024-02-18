@@ -8,12 +8,13 @@ import ru.netology.aqa.data.Config;
 import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
+import static com.codeborne.selenide.Selectors.byTagAndText;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
 public class PaymentPage {
-    private final SelenideElement heading = $x("/html/body/div[1]/div/h3");
+    private final SelenideElement heading = $(byTagAndText("h3", "Оплата по карте"));
     private final ElementsCollection errorMessages = $$(".input__sub");
     private final SelenideElement notificationApproved = $(".notification_status_ok");
     private final SelenideElement notificationDeclined = $(".notification_status_error");
@@ -26,7 +27,7 @@ public class PaymentPage {
     private final SelenideElement processButton = $(byText("Продолжить"));
 
     public PaymentPage() {
-        heading.shouldHave(exactTextCaseSensitive("Оплата по карте")).shouldBe(visible);
+        heading.shouldBe(visible);
     }
 
     public void shouldBeError(String message) {
