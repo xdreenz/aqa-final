@@ -20,7 +20,7 @@ compileTestJava {
 
 tasks {
     wrapper {
-        gradleVersion = '8.6'
+        gradleVersion = '8.8'
         distributionType = Wrapper.DistributionType.ALL
     }
 }
