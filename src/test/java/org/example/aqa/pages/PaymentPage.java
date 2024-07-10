@@ -1,21 +1,20 @@
-package ru.netology.aqa.pages;
+package org.example.aqa.pages;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import ru.netology.aqa.data.DataHelper;
-import ru.netology.aqa.data.Config;
+import org.example.aqa.data.DataHelper;
+import org.example.aqa.data.Config;
 
 import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
-import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byTagAndText;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
-public class CreditRequestPage {
-    private final SelenideElement heading = $(byTagAndText("h3", "Кредит по данным карты"));
-    private final ElementsCollection errorMessages = $$(".input__sub");
+public class PaymentPage {
+    private final SelenideElement heading = $(byTagAndText("h3", "Оплата по карте"));
     private final SelenideElement notificationApproved = $(".notification_status_ok");
     private final SelenideElement notificationDeclined = $(".notification_status_error");
     private final SelenideElement notification = $(".notification");
@@ -25,8 +24,9 @@ public class CreditRequestPage {
     private final SelenideElement cardOwnerNameField = $("input", 3);
     private final SelenideElement cardCVCField = $("input", 4);
     private final SelenideElement processButton = $(byText("Продолжить"));
+    private final ElementsCollection errorMessages = $$(".input__sub");
 
-    public CreditRequestPage() {
+    public PaymentPage() {
         heading.shouldBe(visible);
     }
 

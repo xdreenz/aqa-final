@@ -1,4 +1,4 @@
-package ru.netology.aqa.data;
+package org.example.aqa.data;
 
 import net.datafaker.Faker;
 
@@ -36,7 +36,7 @@ public class DataHelper {
     }
 
     public static String generateValidCardOwnerName() {
-        return faker.name().firstName() + " " + faker.name().lastName();
+        return faker.name().firstName() + StringUtils.SPACE + faker.name().lastName();
     }
 
     public static String generateValidCardCVV() {

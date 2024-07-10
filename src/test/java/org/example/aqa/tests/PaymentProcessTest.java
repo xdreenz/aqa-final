@@ -1,22 +1,22 @@
-package ru.netology.aqa.tests;
+package org.example.aqa.tests;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.apache.commons.lang3.StringUtils;
+import org.example.aqa.data.Config;
+import org.example.aqa.data.DataHelper;
+import org.example.aqa.data.SQLHelper;
+import org.example.aqa.pages.DashboardPage;
+import org.example.aqa.pages.PaymentPage;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.netology.aqa.data.DataHelper;
-import ru.netology.aqa.data.SQLHelper;
-import ru.netology.aqa.pages.DashboardPage;
-import ru.netology.aqa.pages.PaymentPage;
-import ru.netology.aqa.data.Config;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PaymentProcessTest {
@@ -27,6 +27,7 @@ public class PaymentProcessTest {
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
+
         try {
             dataJsonItems = DataHelper.getDataJsonItems(Config.datajsonLocation);
         } catch (IOException e) {
@@ -38,7 +39,7 @@ public class PaymentProcessTest {
     @BeforeEach
     void setUp() {
         SQLHelper.cleanDatabase();
-        var dashboardPage = open(Config.localhostURL, DashboardPage.class);
+        var dashboardPage = Selenide.open(Config.localhostURL, DashboardPage.class);
         paymentPage = dashboardPage.choosePaymentOption();
     }
 

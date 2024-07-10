@@ -1,11 +1,13 @@
-package ru.netology.aqa.tests;
+package org.example.aqa.tests;
 
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
+import org.example.aqa.data.Config;
+import org.example.aqa.pages.DashboardPage;
 import org.junit.jupiter.api.*;
-import ru.netology.aqa.data.DataHelper;
-import ru.netology.aqa.pages.DashboardPage;
-import ru.netology.aqa.pages.PaymentPage;
+import org.example.aqa.data.DataHelper;
+import org.example.aqa.pages.PaymentPage;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -19,7 +21,7 @@ public class PaymentFormTest {
 
     @BeforeEach
     void setUp() {
-        var dashboardPage = open(System.getProperty("aqa-diploma.localhostURL"), DashboardPage.class);
+        var dashboardPage = Selenide.open(Config.localhostURL, DashboardPage.class);
         paymentPage = dashboardPage.choosePaymentOption();
     }
 
@@ -45,7 +47,7 @@ public class PaymentFormTest {
     }
 
     @Test
-    @DisplayName("No card expire month, should be an error")
+    @DisplayName("No card expiration month, should be an error")
     void noCardExpireMonth_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), "", DataHelper.generateValidCardExpireYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -54,7 +56,7 @@ public class PaymentFormTest {
     }
 
     @Test
-    @DisplayName("No card expire year, should be an error")
+    @DisplayName("No card expiration year, should be an error")
     void noCardExpireYear_ShouldBeError() {
         var cardInfo = new DataHelper.CardInfo(DataHelper.generateValidCardNumber(), DataHelper.generateValidCardExpireMonth(), "",
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());

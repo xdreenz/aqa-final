@@ -1,4 +1,4 @@
-package ru.netology.aqa.data;
+package org.example.aqa.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

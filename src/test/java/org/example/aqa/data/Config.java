@@ -1,4 +1,4 @@
-package ru.netology.aqa.data;
+package org.example.aqa.data;
 
 public class Config {
     public static String localhostURL = System.getProperty("aqa-final.localhostURL");

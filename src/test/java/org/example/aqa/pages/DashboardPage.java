@@ -1,4 +1,4 @@
-package ru.netology.aqa.pages;
+package org.example.aqa.pages;
 
 import com.codeborne.selenide.SelenideElement;
 
