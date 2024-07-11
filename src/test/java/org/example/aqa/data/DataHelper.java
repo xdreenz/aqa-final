@@ -24,13 +24,13 @@ public class DataHelper {
         return faker.finance().creditCard(Finance.CreditCardType.VISA);
     }
 
-    public static String generateValidCardExpireMonth() {
+    public static String generateValidCardExpirationMonth() {
         int randomNumber = faker.number().numberBetween(1, 12);
         var result = String.valueOf(randomNumber);
         return StringUtils.leftPad(result, 2, "0");
     }
 
-    public static String generateValidCardExpireYear() {
+    public static String generateValidCardExpirationYear() {
         int randomYear = faker.number().numberBetween(24, 28);
         return String.valueOf(randomYear);
     }
@@ -53,7 +53,7 @@ public class DataHelper {
     }
 
     public static CardInfo generateValidCardInfo() {
-        return new CardInfo(generateValidCardNumber(), generateValidCardExpireMonth(), generateValidCardExpireYear(),
+        return new CardInfo(generateValidCardNumber(), generateValidCardExpirationMonth(), generateValidCardExpirationYear(),
                 generateValidCardOwnerName(), generateValidCardCVV());
     }
 

@@ -56,7 +56,7 @@ public class CreditRequestProcessTest {
     @DisplayName("Cards from the emulator's base: does its displayed status equal the correct one received from the emulator")
     void cardDisplayedStatus_ShouldBeEqualToTheCorrect(int repeats) {
         var cardItem = dataJsonItems.get(repeats - 1);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         if (cardItem.getCardStatus().equals(DataHelper.APPROVED_STATUS))
@@ -70,7 +70,7 @@ public class CreditRequestProcessTest {
     @DisplayName("Cards from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
     void cardSavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
         var cardItem = dataJsonItems.get(repeats - 1);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         var actualCreditRequestStatus = SQLHelper.getCreditRequestEntity().getStatus();
@@ -82,7 +82,7 @@ public class CreditRequestProcessTest {
     @DisplayName("The card from the emulator's base: Have the transaction_id's been saved to both tables")
     void transaction_id_ShouldBeSaved() {
         var cardItem = dataJsonItems.get(0);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         var bank_idFromCreditRequestEntity = SQLHelper.getCreditRequestEntity().getBank_id();
@@ -97,7 +97,7 @@ public class CreditRequestProcessTest {
     @DisplayName("The card from the emulator's base: Are the transaction_id's the same in both tables")
     void transaction_id_TheSameInBothTables() {
         var cardItem = dataJsonItems.get(0);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         var bank_idFromCreditEntity = SQLHelper.getCreditRequestEntity().getBank_id();
@@ -109,7 +109,7 @@ public class CreditRequestProcessTest {
     @DisplayName("The card from the emulator's base: Is order_entity.payment_id empty")
     void order_entity_payment_id_IsEmpty() {
         var cardItem = dataJsonItems.get(0);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         var credit_idFromOrderEntity = SQLHelper.getOrderEntity().getPayment_id();
@@ -120,7 +120,7 @@ public class CreditRequestProcessTest {
     @DisplayName("Is the payment_entity table empty")
     void payment_entity_Table_IsEmpty() {
         var cardItem = dataJsonItems.get(0);
-        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpireMonth(), DataHelper.generateValidCardExpireYear(),
+        var cardInfo = new DataHelper.CardInfo(cardItem.getCardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
         creditPage.processTheCardAndWait(cardInfo);
         assertTrue(SQLHelper.isTheTableEmpty("payment_entity"));
