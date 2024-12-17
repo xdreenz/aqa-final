@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'io.freefair.lombok' version '8.6'
-    id 'io.qameta.allure' version '2.11.2'
+    id 'io.freefair.lombok' version '8.11'
+    id 'io.qameta.allure' version '2.12.0'
 }
 
 group = 'org.example'
@@ -26,15 +26,15 @@ tasks {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.11.2')
+    testImplementation platform('org.junit:junit-bom:5.11.3')
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'com.codeborne:selenide:7.5.0'
-    testImplementation 'io.qameta.allure:allure-selenide:2.29.0'
-    testImplementation 'io.qameta.allure:allure-junit5:2.29.0'
-    testImplementation 'net.datafaker:datafaker:2.4.0'
+    testImplementation 'com.codeborne:selenide:7.6.0'
+    testImplementation 'io.qameta.allure:allure-selenide:2.29.1'
+    testImplementation 'io.qameta.allure:allure-junit5:2.29.1'
+    testImplementation 'net.datafaker:datafaker:2.4.2'
     testImplementation 'commons-dbutils:commons-dbutils:1.8.1'
-    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
-    testImplementation 'com.mysql:mysql-connector-j:9.0.0'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+    testImplementation 'com.mysql:mysql-connector-j:9.1.0'
     testImplementation 'org.postgresql:postgresql:42.7.4'
     testImplementation 'org.apache.commons:commons-lang3:3.17.0'
 }
