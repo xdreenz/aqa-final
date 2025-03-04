@@ -47,11 +47,11 @@ public class CreditRequestPage {
     }
 
     public void processTheCard(DataHelper.CardInfo cardInfo) {
-        cardNumberField.setValue(cardInfo.getCardNumber());
-        cardExpireMonthField.setValue(cardInfo.getCardExpireMonth());
-        cardExpireYearField.setValue(cardInfo.getCardExpireYear());
-        cardOwnerNameField.setValue(cardInfo.getCardOwnerName());
-        cardCVCField.setValue(cardInfo.getCardCVC());
+        cardNumberField.setValue(cardInfo.cardNumber());
+        cardExpireMonthField.setValue(cardInfo.cardExpireMonth());
+        cardExpireYearField.setValue(cardInfo.cardExpireYear());
+        cardOwnerNameField.setValue(cardInfo.cardOwnerName());
+        cardCVCField.setValue(cardInfo.cardCVC());
         processButton.click();
     }
 

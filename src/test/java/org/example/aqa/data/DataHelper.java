@@ -31,7 +31,7 @@ public class DataHelper {
     }
 
     public static String generateValidCardExpirationYear() {
-        int randomYear = faker.number().numberBetween(24, 28);
+        int randomYear = faker.number().numberBetween(25, 29);
         return String.valueOf(randomYear);
     }
 
@@ -57,24 +57,16 @@ public class DataHelper {
                 generateValidCardOwnerName(), generateValidCardCVV());
     }
 
-    @Value
-    public static class CardInfo {
-        String cardNumber;
-        String cardExpireMonth;
-        String cardExpireYear;
-        String cardOwnerName;
-        String cardCVC;
-    }
+    public record CardInfo (
+        String cardNumber,
+        String cardExpireMonth,
+        String cardExpireYear,
+        String cardOwnerName,
+        String cardCVC
+    ) {}
 
-    @Value
-    public static class DataJsonItem {
-        String cardNumber;
-        String cardStatus;
-        public DataJsonItem(
-                @JsonProperty("number") String cardNumber,
-                @JsonProperty("status") String cardStatus) {
-            this.cardNumber = cardNumber;
-            this.cardStatus = cardStatus;
-        }
-    }
+    public record DataJsonItem(
+            @JsonProperty("number") String cardNumber,
+            @JsonProperty("status") String cardStatus
+    ) {}
 }
