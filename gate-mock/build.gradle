@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.mock'
+version '1.1'
+
+application {
+    mainClass = 'org.mock.Main'
+}
+
+java { sourceCompatibility = JavaVersion.VERSION_17 }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.wiremock:wiremock:3.12.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
+}

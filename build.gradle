@@ -11,12 +11,7 @@ repositories {
     mavenCentral()
 }
 
-compileJava {
-    options.encoding = 'UTF-8'
-}
-compileTestJava {
-    options.encoding = 'UTF-8'
-}
+java { sourceCompatibility = JavaVersion.VERSION_17 }
 
 tasks {
     wrapper {
@@ -39,13 +34,17 @@ dependencies {
     testImplementation 'org.apache.commons:commons-lang3:3.17.0'
 }
 
+dependencies {
+    implementation project(':gate-mock')
+}
+
 test {
     testLogging.showStandardStreams = true
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', true
     systemProperty 'aqa-final.localhostURL', 'http://localhost:8080'
-    systemProperty 'aqa-final.datajsonLocation', System.getProperty('emulator.data', 'gate-emulator/data.json')
+    systemProperty 'aqa-final.datajsonLocation', System.getProperty('mock.data', 'gate-mock/data.json')
     systemProperty 'aqa-final.secondstowait', 20
     systemProperty 'db.url', System.getProperty('db.url', 'jdbc:postgresql://localhost:5432/app')
     systemProperty 'db.user', System.getProperty('db.user', 'app')
