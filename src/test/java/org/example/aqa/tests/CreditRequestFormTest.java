@@ -30,6 +30,7 @@ public class CreditRequestFormTest {
     }
 
     @Test
+    @Tag("smoke")
     @DisplayName("Happy path, should be no errors")
     void happyPath_ShouldBeNoErrors() {
         creditPage.processTheCard(DataHelper.generateValidCardInfo());

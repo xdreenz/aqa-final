@@ -52,6 +52,7 @@ public class CreditRequestProcessTest {
     }   //+1 ко всему - костыль, чтобы номера карт выводились с 1
 
     @ParameterizedTest(name = "Card №{0}")
+    @Tag("smoke")
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its displayed status equal the correct one received from the emulator")
     void cardDisplayedStatus_ShouldBeEqualToTheCorrect(int repeats) {
@@ -66,6 +67,7 @@ public class CreditRequestProcessTest {
     }
 
     @ParameterizedTest(name = "Card №{0}")
+    @Tag("smoke")
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
     void cardSavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
@@ -79,6 +81,7 @@ public class CreditRequestProcessTest {
     }
 
     @Test
+    @Tag("smoke")
     @DisplayName("The card from the emulator's base: Have the transaction_id's been saved to both tables")
     void transaction_id_ShouldBeSaved() {
         var cardItem = dataJsonItems.get(0);
@@ -94,6 +97,7 @@ public class CreditRequestProcessTest {
     }
 
     @Test
+    @Tag("smoke")
     @DisplayName("The card from the emulator's base: Are the transaction_id's the same in both tables")
     void transaction_id_TheSameInBothTables() {
         var cardItem = dataJsonItems.get(0);

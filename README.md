@@ -27,9 +27,13 @@ docker pull postgres:14.10-alpine
 
 ```java -jar artifacts/aqa-shop.jar```
 
-8. Для запуска автотестов выполнить команду
+8. Для запуска всех автотестов выполнить команду
 
 ```gradlew test --info -Dselenide.headless=true```
+
+Для запуска только смоук-тестов выполнить команду
+
+```gradlew smoke --info -Dselenide.headless=true```
 
 9. Для просмотра отчёта о тестировании выполнить команду
    

@@ -31,6 +31,7 @@ public class PaymentFormTest {
     }
 
     @Test
+    @Tag("smoke")
     @DisplayName("Happy path, should be no errors")
     void happyPath_ShouldBeNoErrors() {
         paymentPage.processTheCard(DataHelper.generateValidCardInfo());
