@@ -3,8 +3,9 @@ package org.example.aqa.pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.example.aqa.data.DataHelper;
-import org.example.aqa.data.Config;
+import org.example.aqa.data.ConfigReader;
 
+import java.io.IOException;
 import java.time.Duration;
 
 import static com.codeborne.selenide.CollectionCondition.empty;
@@ -38,12 +39,12 @@ public class PaymentPage {
         errorMessages.shouldBe(empty);
     }
 
-    public void shouldBeApprovedMessage() {
-        notificationApproved.shouldBe(visible, Duration.ofSeconds(Config.secondstowait));
+    public void shouldBeApprovedMessage() throws IOException {
+        notificationApproved.shouldBe(visible, Duration.ofSeconds(ConfigReader.getInstance().getConfig().getSecondstowait()));
     }
 
-    public void shouldBeDeclinedMessage() {
-        notificationDeclined.shouldBe(visible, Duration.ofSeconds(Config.secondstowait));
+    public void shouldBeDeclinedMessage() throws IOException {
+        notificationDeclined.shouldBe(visible, Duration.ofSeconds(ConfigReader.getInstance().getConfig().getSecondstowait()));
     }
 
     public void processTheCard(DataHelper.CardInfo cardInfo) {
@@ -55,8 +56,8 @@ public class PaymentPage {
         processButton.click();
     }
 
-    public void processTheCardAndWait(DataHelper.CardInfo cardInfo) {
+    public void processTheCardAndWait(DataHelper.CardInfo cardInfo) throws IOException {
         processTheCard(cardInfo);
-        notification.shouldBe(visible, Duration.ofSeconds(Config.secondstowait));
+        notification.shouldBe(visible, Duration.ofSeconds(ConfigReader.getInstance().getConfig().getSecondstowait()));
     }
 }

@@ -3,11 +3,13 @@ package org.example.aqa.tests;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.example.aqa.data.Config;
+import org.example.aqa.data.ConfigReader;
 import org.example.aqa.pages.DashboardPage;
 import org.junit.jupiter.api.*;
 import org.example.aqa.data.DataHelper;
 import org.example.aqa.pages.PaymentPage;
+
+import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -20,8 +22,8 @@ public class PaymentFormTest {
     }
 
     @BeforeEach
-    void setUp() {
-        var dashboardPage = Selenide.open(Config.localhostURL, DashboardPage.class);
+    void setUp() throws IOException {
+        var dashboardPage = Selenide.open(ConfigReader.getInstance().getConfig().getLocalhostURL(), DashboardPage.class);
         paymentPage = dashboardPage.choosePaymentOption();
     }
 

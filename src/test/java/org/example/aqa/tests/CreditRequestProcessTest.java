@@ -4,7 +4,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.apache.commons.lang3.StringUtils;
-import org.example.aqa.data.Config;
+import org.example.aqa.data.ConfigReader;
 import org.example.aqa.data.DataHelper;
 import org.example.aqa.data.SQLHelper;
 import org.example.aqa.pages.CreditRequestPage;
@@ -28,7 +28,7 @@ public class CreditRequestProcessTest {
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
         try {
-            dataJsonItems = DataHelper.getDataJsonItems(Config.datajsonLocation);
+            dataJsonItems = DataHelper.getDataJsonItems(ConfigReader.getInstance().getConfig().getDatajsonLocation());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -36,9 +36,9 @@ public class CreditRequestProcessTest {
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         SQLHelper.cleanDatabase();
-        var dashboardPage = Selenide.open(Config.localhostURL, DashboardPage.class);
+        var dashboardPage = Selenide.open(ConfigReader.getInstance().getConfig().getLocalhostURL(), DashboardPage.class);
         creditPage = dashboardPage.chooseCreditRequestOption();
     }
 
@@ -55,7 +55,7 @@ public class CreditRequestProcessTest {
     @Tag("smoke")
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its displayed status equal the correct one received from the emulator")
-    void cardDisplayedStatus_ShouldBeEqualToTheCorrect(int repeats) {
+    void cardDisplayedStatus_ShouldBeEqualToTheCorrect(int repeats) throws IOException {
         var cardItem = dataJsonItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.cardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -70,7 +70,7 @@ public class CreditRequestProcessTest {
     @Tag("smoke")
     @MethodSource("repeatTest")
     @DisplayName("Cards from the emulator's base: does its status saved in the database equal the correct one received from the emulator")
-    void cardSavedStatus_ShouldBeEqualToTheCorrect(int repeats) {
+    void cardSavedStatus_ShouldBeEqualToTheCorrect(int repeats) throws IOException {
         var cardItem = dataJsonItems.get(repeats - 1);
         var cardInfo = new DataHelper.CardInfo(cardItem.cardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -83,7 +83,7 @@ public class CreditRequestProcessTest {
     @Test
     @Tag("smoke")
     @DisplayName("The card from the emulator's base: Have the transaction_id's been saved to both tables")
-    void transaction_id_ShouldBeSaved() {
+    void transaction_id_ShouldBeSaved() throws IOException {
         var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.cardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -99,7 +99,7 @@ public class CreditRequestProcessTest {
     @Test
     @Tag("smoke")
     @DisplayName("The card from the emulator's base: Are the transaction_id's the same in both tables")
-    void transaction_id_TheSameInBothTables() {
+    void transaction_id_TheSameInBothTables() throws IOException {
         var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.cardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -111,7 +111,7 @@ public class CreditRequestProcessTest {
 
     @Test
     @DisplayName("The card from the emulator's base: Is order_entity.payment_id empty")
-    void order_entity_payment_id_IsEmpty() {
+    void order_entity_payment_id_IsEmpty() throws IOException {
         var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.cardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -122,7 +122,7 @@ public class CreditRequestProcessTest {
 
     @Test
     @DisplayName("Is the payment_entity table empty")
-    void payment_entity_Table_IsEmpty() {
+    void payment_entity_Table_IsEmpty() throws IOException {
         var cardItem = dataJsonItems.get(0);
         var cardInfo = new DataHelper.CardInfo(cardItem.cardNumber(), DataHelper.generateValidCardExpirationMonth(), DataHelper.generateValidCardExpirationYear(),
                 DataHelper.generateValidCardOwnerName(), DataHelper.generateValidCardCVV());
@@ -132,14 +132,14 @@ public class CreditRequestProcessTest {
 
     @Test
     @DisplayName("The card not from the emulator's base: does its displayed status is DECLINED")
-    void unknownCard_DisplayedStatusShouldBeDeclined() {
+    void unknownCard_DisplayedStatusShouldBeDeclined() throws IOException {
         creditPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         creditPage.shouldBeDeclinedMessage();
     }
 
     @Test
     @DisplayName("The card not from the emulator's base: the credit request shouldn't be saved in database")
-    void unknownCard_RequestShouldNotBeSavedAnywhere() {
+    void unknownCard_RequestShouldNotBeSavedAnywhere() throws IOException {
         creditPage.processTheCardAndWait(DataHelper.generateValidCardInfo());
         assertAll(
                 () -> assertTrue(SQLHelper.isTheTableEmpty("credit_request_entity")),

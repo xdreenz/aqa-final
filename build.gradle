@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.example'
-version = '1.23'
+version = '1.24'
 
 repositories {
     mavenCentral()
@@ -19,15 +19,15 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
     testImplementation(
-        platform('org.junit:junit-bom:5.12.1'),
+        platform('org.junit:junit-bom:5.12.2'),
         'org.junit.jupiter:junit-jupiter',
-        'com.codeborne:selenide:7.7.3',
+        'com.codeborne:selenide:7.9.3',
         'io.qameta.allure:allure-selenide:2.29.1',
         'io.qameta.allure:allure-junit5:2.29.1',
         'net.datafaker:datafaker:2.4.2',
         'commons-dbutils:commons-dbutils:1.8.1',
-        'com.fasterxml.jackson.core:jackson-databind:2.18.3',
-        'com.mysql:mysql-connector-j:9.2.0',
+        'com.fasterxml.jackson.core:jackson-databind:2.19.0',
+        'com.mysql:mysql-connector-j:9.3.0',
         'org.postgresql:postgresql:42.7.5',
         'org.apache.commons:commons-lang3:3.17.0'
     )
@@ -47,11 +47,4 @@ test {
     testLogging.showStandardStreams = true
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
-    systemProperty 'junit.jupiter.extensions.autodetection.enabled', true
-    systemProperty 'aqa-final.localhostURL', 'http://localhost:8080'
-    systemProperty 'aqa-final.datajsonLocation', System.getProperty('mock.data', 'gate-mock/data.json')
-    systemProperty 'aqa-final.secondstowait', 20
-    systemProperty 'db.url', System.getProperty('db.url', 'jdbc:postgresql://localhost:5432/app')
-    systemProperty 'db.user', System.getProperty('db.user', 'app')
-    systemProperty 'db.password', System.getProperty('db.password', 'pass')
 }

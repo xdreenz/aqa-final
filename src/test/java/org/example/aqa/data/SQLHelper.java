@@ -6,6 +6,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
+import java.io.IOException;
 import java.sql.*;
 
 public class SQLHelper {
@@ -17,8 +18,13 @@ public class SQLHelper {
 
     private static Connection getConn() {
         try {
-            return DriverManager.getConnection(Config.dbURL, Config.dbUser, Config.dbPassword);
+            return DriverManager.getConnection(
+                    ConfigReader.getInstance().getConfig().getDbURL(),
+                    ConfigReader.getInstance().getConfig().getDbUser(),
+                    ConfigReader.getInstance().getConfig().getDbPassword());
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

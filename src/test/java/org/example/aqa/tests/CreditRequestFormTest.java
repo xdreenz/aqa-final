@@ -2,11 +2,13 @@ package org.example.aqa.tests;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.example.aqa.data.Config;
+import org.example.aqa.data.ConfigReader;
 import org.example.aqa.pages.CreditRequestPage;
 import org.example.aqa.pages.DashboardPage;
 import org.junit.jupiter.api.*;
 import org.example.aqa.data.DataHelper;
+
+import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -19,8 +21,8 @@ public class CreditRequestFormTest {
     }
 
     @BeforeEach
-    void setUp() {
-        var dashboardPage = open(Config.localhostURL, DashboardPage.class);
+    void setUp() throws IOException {
+        var dashboardPage = open(ConfigReader.getInstance().getConfig().getLocalhostURL(), DashboardPage.class);
         creditPage = dashboardPage.chooseCreditRequestOption();
     }
 
