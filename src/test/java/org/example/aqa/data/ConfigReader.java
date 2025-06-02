@@ -16,7 +16,7 @@ public class ConfigReader {
     private ConfigReader() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Properties props = new Properties();
-        try (InputStream input = Files.newInputStream(Paths.get("src/test/resources/config.properties"))) {
+        try (InputStream input = Files.newInputStream(Paths.get(System.getProperty("config_path")))) {
             props.load(input);
         }
         String json = mapper.writeValueAsString(props);

@@ -47,4 +47,5 @@ test {
     testLogging.showStandardStreams = true
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
+    systemProperty 'config_path', 'src/test/resources/config.properties'
 }
